@@ -11,6 +11,7 @@ public class Media extends EntityPrefix {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     private MediaType mediaType;
 
     private String src;

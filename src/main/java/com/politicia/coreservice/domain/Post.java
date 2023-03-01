@@ -18,6 +18,10 @@ public class Post extends EntityPrefix {
     private String title;
     private String text;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "target_id")
+    private Target target;
+
     @OneToMany(mappedBy = "post")
     private List<Media> mediaList;
 
