@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Getter @Setter
-public class EntityPrefix {
+public abstract class EntityPrefix {
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

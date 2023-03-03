@@ -1,11 +1,10 @@
 package com.politicia.coreservice.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
-@Getter @Setter
+@Getter @Setter @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends EntityPrefix {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,4 +15,12 @@ public class Comment extends EntityPrefix {
     @JoinColumn(name = "post_id")
     private Post post;
     private String text;
+
+    @Builder
+    public Comment(Long id, User user, Post post, String text) {
+        this.id = id;
+        this.user = user;
+        this.post = post;
+        this.text = text;
+    }
 }

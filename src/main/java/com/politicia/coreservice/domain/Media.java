@@ -1,11 +1,10 @@
 package com.politicia.coreservice.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
-@Getter @Setter
+@Getter @Setter @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Media extends EntityPrefix {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,4 +21,12 @@ public class Media extends EntityPrefix {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    @Builder
+    public Media(Long id, MediaType mediaType, String src, String thumbnail, Post post) {
+        this.id = id;
+        this.mediaType = mediaType;
+        this.src = src;
+        this.thumbnail = thumbnail;
+        this.post = post;
+    }
 }
