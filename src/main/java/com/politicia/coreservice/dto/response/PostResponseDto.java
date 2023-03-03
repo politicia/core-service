@@ -1,0 +1,19 @@
+package com.politicia.coreservice.dto.response;
+
+import com.politicia.coreservice.domain.User;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+
+@Getter @Setter @Builder
+public class PostResponseDto {
+
+    private Long postId;
+    private User user;
+    private String title;
+    private String text;
+    private List<String> mediaList;
+    private int commentCount;
+}
