@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter @Setter
 @NoArgsConstructor
@@ -13,14 +15,17 @@ public class User extends EntityPrefix{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String username;
+    private String name;
     private String nationality;
     private String profilePic;
 
     @Builder
-    public User(Long id, String username, String nationality) {
+    public User(Long id, String name, String nationality, String profilePic) {
         this.id = id;
-        this.username = username;
+        this.name = name;
         this.nationality = nationality;
+        this.profilePic = profilePic;
+        setCreatedAt(LocalDateTime.now());
+        setUpdatedAt(LocalDateTime.now());
     }
 }
