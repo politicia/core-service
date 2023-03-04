@@ -1,11 +1,6 @@
 package com.politicia.coreservice.controller;
 
-import com.politicia.coreservice.dto.request.UserRequestDto;
-import com.politicia.coreservice.dto.response.UserResponseDto;
-import com.politicia.coreservice.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
