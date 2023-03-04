@@ -5,14 +5,11 @@ import com.politicia.coreservice.dto.request.UserRequestDto;
 import com.politicia.coreservice.dto.response.UserResponseDto;
 import com.politicia.coreservice.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +23,7 @@ class UserServiceTest {
 
 
     @InjectMocks
-    UserServiceImpl userService;
+    UserService userService;
 
     @Mock
     UserRepository userRepository;
