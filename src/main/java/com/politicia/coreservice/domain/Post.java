@@ -1,5 +1,7 @@
 package com.politicia.coreservice.domain;
 
+import com.politicia.coreservice.domain.like.PostLike;
+import com.politicia.coreservice.dto.response.PostResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,6 +19,9 @@ public class Post extends EntityPrefix {
     private String title;
     private String text;
 
+    @OneToMany(mappedBy = "post")
+    private List<PostLike> postLikes;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "target_id")
     private Target target;
@@ -31,5 +36,16 @@ public class Post extends EntityPrefix {
         this.title = title;
         this.text = text;
         this.target = target;
+    }
+
+    public PostResponseDto toDto() {
+        return PostResponseDto.builder()
+                .postId(id)
+                .user(user)
+                .title(title)
+                .text(text)
+                .target(target)
+                .build();
+
     }
 }
