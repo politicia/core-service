@@ -1,5 +1,6 @@
 package com.politicia.coreservice.dto.response;
 
+import com.politicia.coreservice.domain.Target;
 import com.politicia.coreservice.domain.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +15,7 @@ public class PostResponseDto {
     private User user;
     private String title;
     private String text;
+    private Target target;
     private List<String> mediaList;
     private int commentCount;
 }

@@ -8,7 +8,6 @@ import lombok.Getter;
 
 @Getter @Builder
 public class PostRequestDto {
-    private Long id;
     private User user;
     private String title;
     private String text;
