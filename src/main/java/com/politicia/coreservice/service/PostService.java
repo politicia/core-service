@@ -24,14 +24,16 @@ public class PostService {
 
     public void createPost(PostRequestDto postRequestDto) {
         Post newPost = postRequestDto.toEntity();
+        User user = userRepository.findById(postRequestDto.getUserId()).get();
+        newPost.setUser(user);
         postRepository.save(newPost);
     }
 
     public void editPost(Long postId, PostRequestDto postRequestDto) {
         Post post = postRepository.findById(postId).get();
         post.setTitle(postRequestDto.getTitle());
-        post.setTarget(postRequestDto.getTarget());
         post.setText(postRequestDto.getText());
+        post.setUpdatedAt(LocalDateTime.now());
     }
 
     public void deletePost(Long postId) {

@@ -2,7 +2,6 @@ package com.politicia.coreservice.service;
 
 import com.politicia.coreservice.domain.Post;
 import com.politicia.coreservice.domain.User;
-import com.politicia.coreservice.domain.target.Team;
 import com.politicia.coreservice.dto.request.PostRequestDto;
 import com.politicia.coreservice.dto.response.PostResponseDto;
 import com.politicia.coreservice.repository.PostRepository;
@@ -49,7 +48,7 @@ class PostServiceTest {
                 .title("title")
                 .build();
         PostRequestDto postRequestDto = PostRequestDto.builder()
-                .user(user)
+                .userId(user.getId())
                 .title("title")
                 .build();
         //when

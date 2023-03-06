@@ -10,11 +10,9 @@ public class MediaService {
     public void createMedia(MediaRequestDto mediaRequestDto) {
 
     }
-
     public void deleteMedia(Long mediaId) {
 
     }
-
     public Page<MediaResponseDto> getMediaListByPost(Long postId) {
         return null;
     }
