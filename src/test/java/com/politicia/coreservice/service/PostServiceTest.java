@@ -46,12 +46,15 @@ class PostServiceTest {
                 .id(1L)
                 .user(user)
                 .title("title")
+                .text("text")
                 .build();
         PostRequestDto postRequestDto = PostRequestDto.builder()
                 .userId(user.getId())
                 .title("title")
+                .text("text")
                 .build();
         //when
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(postRepository.save(any(Post.class))).thenReturn(expectedPost);
         postService.createPost(postRequestDto);
 

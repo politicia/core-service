@@ -42,12 +42,24 @@ class CommentServiceTest {
     @Test
     void createComment() {
         //given
+        User user = User.builder()
+                .id(1L)
+                .build();
+        Post post = Post.builder()
+                .id(1L)
+                .build();
         CommentRequestDto commentRequestDto = CommentRequestDto.builder()
+                .userId(1L)
+                .postId(1L)
                 .text("text")
                 .build();
         //when
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(postRepository.findById(1L)).thenReturn(Optional.of(post));
         commentService.createComment(commentRequestDto);
         //then
+        verify(userRepository, times(1)).findById(1L);
+        verify(postRepository, times(1)).findById(1L);
         verify(commentRepository, times(1)).save(any(Comment.class));
     }
 
