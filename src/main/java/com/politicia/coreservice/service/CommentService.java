@@ -24,7 +24,13 @@ public class CommentService {
     private final UserRepository userRepository;
 
     public void createComment(CommentRequestDto commentRequestDto) {
-        Comment newComment = commentRequestDto.toEntity();
+        User user = userRepository.findById(commentRequestDto.getUserId()).get();
+        Post post = postRepository.findById(commentRequestDto.getPostId()).get();
+        Comment newComment = Comment.builder()
+                        .user(user)
+                        .post(post)
+                        .text(commentRequestDto.getText())
+                        .build();
         commentRepository.save(newComment);
     }
 

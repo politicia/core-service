@@ -13,11 +13,4 @@ public class CommentRequestDto {
     private Long postId;
     private String text;
 
-//    public Comment toEntity() {
-//        return Comment.builder()
-//                .user(user)
-//                .post(post)
-//                .text(text)
-//                .build();
-//    }
 }

@@ -12,11 +12,4 @@ public class PostRequestDto {
     private String text;
     private Long targetId;
 
-
-    public Post toEntity() {
-        return Post.builder()
-                .title(title)
-                .text(text)
-                .build();
-    }
 }

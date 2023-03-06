@@ -23,8 +23,12 @@ public class PostService {
     private final UserRepository userRepository;
 
     public void createPost(PostRequestDto postRequestDto) {
-        Post newPost = postRequestDto.toEntity();
         User user = userRepository.findById(postRequestDto.getUserId()).get();
+        Post newPost = Post.builder()
+                        .user(user)
+                        .title(postRequestDto.getTitle())
+                        .text(postRequestDto.getText())
+                        .build();
         newPost.setUser(user);
         postRepository.save(newPost);
     }
