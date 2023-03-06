@@ -1,5 +1,7 @@
 package com.politicia.coreservice.domain;
 
+import com.politicia.coreservice.dto.response.CommentResponseDto;
+import com.politicia.coreservice.dto.response.PostResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,5 +24,17 @@ public class Comment extends EntityPrefix {
         this.user = user;
         this.post = post;
         this.text = text;
+    }
+
+    public CommentResponseDto toDto() {
+        return CommentResponseDto.builder()
+                .commentId(id)
+                .user(user)
+                .postId(post.getId())
+                .text(text)
+                .createdAt(getCreatedAt())
+                .updatedAt(getUpdatedAt())
+                .build();
+
     }
 }

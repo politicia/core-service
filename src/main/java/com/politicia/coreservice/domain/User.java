@@ -1,5 +1,6 @@
 package com.politicia.coreservice.domain;
 
+import com.politicia.coreservice.dto.response.UserResponseDto;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,5 +28,16 @@ public class User extends EntityPrefix{
         this.profilePic = profilePic;
         setCreatedAt(LocalDateTime.now());
         setUpdatedAt(LocalDateTime.now());
+    }
+
+    public UserResponseDto toDto() {
+        return UserResponseDto.builder()
+                .id(id)
+                .name(name)
+                .nationality(nationality)
+                .profilePic(profilePic)
+                .createdAt(getCreatedAt())
+                .updatedAt(getUpdatedAt())
+                .build();
     }
 }
