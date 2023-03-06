@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter @Setter @Builder
 public class MediaResponseDto {
     private Long mediaId;
@@ -12,4 +14,6 @@ public class MediaResponseDto {
     private MediaType mediaType;
     private String src;
     private String thumbnail;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

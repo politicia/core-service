@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter @Setter @Builder
@@ -18,4 +19,6 @@ public class PostResponseDto {
     private Target target;
     private List<String> mediaList;
     private int commentCount;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
