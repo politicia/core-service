@@ -40,11 +40,12 @@ class CommentControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .characterEncoding("UTF-8")
-                                .content("{\n" +
-                                        "    \"userId\": \"1\",\n" +
-                                        "    \"postId\": \"1\",\n" +
-                                        "    \"text\": \"text\"\n" +
-                                        "}"
+                                .content("""
+                                        {
+                                            "userId": "1",
+                                            "postId": "1",
+                                            "text": "text"
+                                        }"""
                                 ))
                         .andExpect(status().isCreated());
         Mockito.verify(commentService, times(1)).createComment(any(CommentPostRequestDto.class));

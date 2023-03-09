@@ -4,8 +4,12 @@ import com.politicia.coreservice.dto.request.media.MediaPostRequestDto;
 import com.politicia.coreservice.dto.response.MediaResponseDto;
 import com.politicia.coreservice.service.MediaService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("media")
@@ -15,16 +19,19 @@ public class MediaController {
 
     @PostMapping
     public ResponseEntity<Void> createMedia(@RequestBody MediaPostRequestDto mediaPostRequestDto) {
-        return null;
+        mediaService.createMedia(mediaPostRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping("/{mediaId}")
     public ResponseEntity<Void> deleteMedia(@PathVariable Long mediaId) {
-        return null;
+        mediaService.deleteMedia(mediaId);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
     @GetMapping("/{postId}")
-    public ResponseEntity<MediaResponseDto> getMedia(@PathVariable Long postId, int page) {
-        return null;
+    public ResponseEntity<List<MediaResponseDto>> getMedia(@PathVariable Long postId) {
+        List<MediaResponseDto> mediaList = mediaService.getMediaListByPost(postId);
+        return ResponseEntity.ok().body(mediaList);
     }
 
 }

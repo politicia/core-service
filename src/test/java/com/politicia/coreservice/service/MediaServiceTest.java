@@ -14,6 +14,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +44,7 @@ class MediaServiceTest {
         MediaPostRequestDto mediaPostRequestDto = MediaPostRequestDto.builder()
                 .mediaType(MediaType.IMAGE)
                 .build();
-
+        MultipartFile multipartFile = new MockMultipartFile("name.txt", new byte[0]);
         //when
         when(mediaRepository.save(any(Media.class))).thenReturn(media);
         mediaService.createMedia(mediaPostRequestDto);
@@ -90,9 +92,9 @@ class MediaServiceTest {
 
         //when
         when(mediaRepository.findByPost(any(Post.class))).thenReturn(mediaPage);
-        Page<MediaResponseDto> result = mediaService.getMediaListByPost(post.getId());
+        List<MediaResponseDto> result = mediaService.getMediaListByPost(post.getId());
         //then
-        Assertions.assertEquals(result.getContent().get(0).getMediaId(), mediaA.getId());
-        Assertions.assertEquals(result.getContent().get(1).getMediaId(), mediaB.getId());
+        Assertions.assertEquals(result.get(0).getMediaId(), mediaA.getId());
+        Assertions.assertEquals(result.get(1).getMediaId(), mediaB.getId());
     }
 }

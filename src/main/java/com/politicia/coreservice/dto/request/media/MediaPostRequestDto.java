@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter @Builder
 public class MediaPostRequestDto {
@@ -13,7 +14,7 @@ public class MediaPostRequestDto {
     private Long postId;
     @NotNull
     private MediaType mediaType;
-    @Pattern(regexp = "[(http(s)?):\\/\\/(www\\.)?a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)")
-    private String src;
+    @NotNull
+    private MultipartFile file;
 
 }
