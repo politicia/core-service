@@ -83,7 +83,7 @@ class PostControllerTest {
                 .build();
 
         //when
-        mockMvc.perform(put("/post/1")
+        mockMvc.perform(patch("/post/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
@@ -143,7 +143,7 @@ class PostControllerTest {
         //when
         when(postService.getPostsByDate(date, 0)).thenReturn(posts);
         //then
-        mockMvc.perform(get("/post/list?date=2023-03-05"))
+        mockMvc.perform(get("/post/list?date=2023-03-05&page=0"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.postId").value(postA.getPostId()))

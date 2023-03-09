@@ -20,13 +20,13 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity<Void> createPost(@RequestBody PostPostRequestDto postPostRequestDto) {
+    public ResponseEntity<Void> createPost( PostPostRequestDto postPostRequestDto) {
         postService.createPost(postPostRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("/{postId}")
-    public ResponseEntity<Void> editPost(@PathVariable Long postId, @RequestBody PostPatchRequestDto postPatchRequestDto) {
+    @PatchMapping("/{postId}")
+    public ResponseEntity<Void> editPost(@PathVariable Long postId, PostPatchRequestDto postPatchRequestDto) {
         postService.editPost(postId, postPatchRequestDto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -44,16 +44,14 @@ public class PostController {
     }
     @GetMapping("/list")
     public ResponseEntity<Page<PostResponseDto>> getPostList(@RequestParam Optional<Long> userId, @RequestParam Optional<LocalDate> date, @RequestParam int page) {
-        Page<PostResponseDto> posts;
         if (userId.isPresent()) {
-            posts = postService.getPostsByUser(userId.get(), page);
+            return ResponseEntity.ok().body(postService.getPostsByUser(userId.get(), page));
         }
         else if (date.isPresent()) {
-            posts = postService.getPostsByDate(date.get(), page);
+            return ResponseEntity.ok().body(postService.getPostsByDate(date.get(), page));
         }
         else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.ok().body(posts);
     }
 }

@@ -21,7 +21,7 @@ public class CommentController {
         commentService.createComment(commentPostRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-    @PutMapping("/{commentId}")
+    @PatchMapping("/{commentId}")
     public ResponseEntity<Void> editComment(@PathVariable Long commentId, @RequestBody CommentPatchRequestDto commentPatchRequestDto) {
         commentService.editComment(commentId, commentPatchRequestDto);
         return ResponseEntity.status(HttpStatus.OK).build();
