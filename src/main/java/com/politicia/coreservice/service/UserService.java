@@ -1,7 +1,7 @@
 package com.politicia.coreservice.service;
 
 import com.politicia.coreservice.domain.User;
-import com.politicia.coreservice.dto.request.UserRequestDto;
+import com.politicia.coreservice.dto.request.user.UserPostRequestDto;
 import com.politicia.coreservice.dto.response.UserResponseDto;
 import com.politicia.coreservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +16,13 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserResponseDto createUser(UserRequestDto userRequestDto) {
+    public UserResponseDto createUser(UserPostRequestDto userRequestDto) {
 
-        User user = userRequestDto.toEntity();
+        User user = User.builder()
+                .name(userRequestDto.getName())
+                .nationality(userRequestDto.getNationality())
+                .profilePic(userRequestDto.getProfilePic())
+                .build();
         User newUser = userRepository.save(user);
         return UserResponseDto.builder()
                 .id(newUser.getId())

@@ -1,6 +1,6 @@
 package com.politicia.coreservice.controller;
 
-import com.politicia.coreservice.dto.request.MediaRequestDto;
+import com.politicia.coreservice.dto.request.media.MediaPostRequestDto;
 import com.politicia.coreservice.dto.response.MediaResponseDto;
 import com.politicia.coreservice.service.MediaService;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ public class MediaController {
     private final MediaService mediaService;
 
     @PostMapping
-    public ResponseEntity<Void> createMedia(@RequestBody MediaRequestDto mediaRequestDto) {
+    public ResponseEntity<Void> createMedia(@RequestBody MediaPostRequestDto mediaPostRequestDto) {
         return null;
     }
 

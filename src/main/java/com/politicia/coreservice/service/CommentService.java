@@ -3,7 +3,8 @@ package com.politicia.coreservice.service;
 import com.politicia.coreservice.domain.Comment;
 import com.politicia.coreservice.domain.Post;
 import com.politicia.coreservice.domain.User;
-import com.politicia.coreservice.dto.request.CommentRequestDto;
+import com.politicia.coreservice.dto.request.comment.CommentPatchRequestDto;
+import com.politicia.coreservice.dto.request.comment.CommentPostRequestDto;
 import com.politicia.coreservice.dto.response.CommentResponseDto;
 import com.politicia.coreservice.repository.CommentRepository;
 import com.politicia.coreservice.repository.PostRepository;
@@ -23,7 +24,7 @@ public class CommentService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
-    public void createComment(CommentRequestDto commentRequestDto) {
+    public void createComment(CommentPostRequestDto commentRequestDto) {
         User user = userRepository.findById(commentRequestDto.getUserId()).get();
         Post post = postRepository.findById(commentRequestDto.getPostId()).get();
         Comment newComment = Comment.builder()
@@ -34,7 +35,7 @@ public class CommentService {
         commentRepository.save(newComment);
     }
 
-    public void editComment(Long commentId, CommentRequestDto commentRequestDto) {
+    public void editComment(Long commentId, CommentPatchRequestDto commentRequestDto) {
         Comment comment = commentRepository.findById(commentId).get();
         comment.setText(commentRequestDto.getText());
         comment.setUpdatedAt(LocalDateTime.now());

@@ -1,12 +1,13 @@
 package com.politicia.coreservice.service;
 
 import com.politicia.coreservice.domain.Post;
-import com.politicia.coreservice.domain.Target;
 import com.politicia.coreservice.domain.User;
-import com.politicia.coreservice.dto.request.PostRequestDto;
+import com.politicia.coreservice.dto.request.post.PostPatchRequestDto;
+import com.politicia.coreservice.dto.request.post.PostPostRequestDto;
 import com.politicia.coreservice.dto.response.PostResponseDto;
 import com.politicia.coreservice.repository.PostRepository;
 import com.politicia.coreservice.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,26 +18,32 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
-    public void createPost(PostRequestDto postRequestDto) {
-        User user = userRepository.findById(postRequestDto.getUserId()).get();
+    public void createPost(PostPostRequestDto postPostRequestDto) {
+        User user = userRepository.findById(postPostRequestDto.getUserId()).get();
         Post newPost = Post.builder()
                         .user(user)
-                        .title(postRequestDto.getTitle())
-                        .text(postRequestDto.getText())
+                        .title(postPostRequestDto.getTitle())
+                        .text(postPostRequestDto.getText())
                         .build();
         newPost.setUser(user);
         postRepository.save(newPost);
     }
 
-    public void editPost(Long postId, PostRequestDto postRequestDto) {
+    public void editPost(Long postId, PostPatchRequestDto postPatchRequestDto) {
         Post post = postRepository.findById(postId).get();
-        post.setTitle(postRequestDto.getTitle());
-        post.setText(postRequestDto.getText());
+
+        if (postPatchRequestDto.getTitle() != null) {
+            post.setTitle(postPatchRequestDto.getTitle());
+        }
+        if (postPatchRequestDto.getText() != null) {
+            post.setText(postPatchRequestDto.getText());
+        }
         post.setUpdatedAt(LocalDateTime.now());
     }
 
