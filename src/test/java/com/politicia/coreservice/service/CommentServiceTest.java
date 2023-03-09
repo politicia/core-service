@@ -3,7 +3,8 @@ package com.politicia.coreservice.service;
 import com.politicia.coreservice.domain.Comment;
 import com.politicia.coreservice.domain.Post;
 import com.politicia.coreservice.domain.User;
-import com.politicia.coreservice.dto.request.CommentRequestDto;
+import com.politicia.coreservice.dto.request.comment.CommentPatchRequestDto;
+import com.politicia.coreservice.dto.request.comment.CommentPostRequestDto;
 import com.politicia.coreservice.dto.response.CommentResponseDto;
 import com.politicia.coreservice.repository.CommentRepository;
 import com.politicia.coreservice.repository.PostRepository;
@@ -13,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -48,7 +48,7 @@ class CommentServiceTest {
         Post post = Post.builder()
                 .id(1L)
                 .build();
-        CommentRequestDto commentRequestDto = CommentRequestDto.builder()
+        CommentPostRequestDto commentPostRequestDto = CommentPostRequestDto.builder()
                 .userId(1L)
                 .postId(1L)
                 .text("text")
@@ -56,7 +56,7 @@ class CommentServiceTest {
         //when
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(postRepository.findById(1L)).thenReturn(Optional.of(post));
-        commentService.createComment(commentRequestDto);
+        commentService.createComment(commentPostRequestDto);
         //then
         verify(userRepository, times(1)).findById(1L);
         verify(postRepository, times(1)).findById(1L);
@@ -71,12 +71,12 @@ class CommentServiceTest {
                 .text("text")
                 .build();
         Long commentId = 1L;
-        CommentRequestDto commentRequestDto = CommentRequestDto.builder()
+        CommentPatchRequestDto commentPatchRequestDto = CommentPatchRequestDto.builder()
                 .text("newText")
                 .build();
         //when
         when(commentRepository.findById(any(Long.class))).thenReturn(Optional.of(comment));
-        commentService.editComment(commentId, commentRequestDto);
+        commentService.editComment(commentId, commentPatchRequestDto);
         //then
         Assertions.assertEquals(comment.getText(), "newText");
     }

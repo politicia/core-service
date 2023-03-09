@@ -1,20 +1,16 @@
 package com.politicia.coreservice.controller;
 
 import com.politicia.coreservice.domain.User;
-import com.politicia.coreservice.dto.request.UserRequestDto;
+import com.politicia.coreservice.dto.request.user.UserPostRequestDto;
 import com.politicia.coreservice.dto.response.UserResponseDto;
 import com.politicia.coreservice.service.UserService;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -56,7 +52,7 @@ class UserControllerTest {
     @Test
     void createUser() throws Exception {
         //given
-        UserRequestDto userRequestDto = UserRequestDto.builder()
+        UserPostRequestDto userRequestDto = UserPostRequestDto.builder()
                 .name("test")
                 .profilePic("https://profile.pic")
                 .nationality("testCountry")

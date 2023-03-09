@@ -1,7 +1,7 @@
 package com.politicia.coreservice.service;
 
 import com.politicia.coreservice.domain.User;
-import com.politicia.coreservice.dto.request.UserRequestDto;
+import com.politicia.coreservice.dto.request.user.UserPostRequestDto;
 import com.politicia.coreservice.dto.response.UserResponseDto;
 import com.politicia.coreservice.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -31,7 +31,7 @@ class UserServiceTest {
     @Test
     void testSignUp() {
         //given
-        UserRequestDto newUser = UserRequestDto.builder()
+        UserPostRequestDto newUser = UserPostRequestDto.builder()
                 .name("newUser")
                 .profilePic("https://profile.pic")
                 .nationality("korea")

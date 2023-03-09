@@ -3,7 +3,7 @@ package com.politicia.coreservice.service;
 import com.politicia.coreservice.domain.Media;
 import com.politicia.coreservice.domain.MediaType;
 import com.politicia.coreservice.domain.Post;
-import com.politicia.coreservice.dto.request.MediaRequestDto;
+import com.politicia.coreservice.dto.request.media.MediaPostRequestDto;
 import com.politicia.coreservice.dto.response.MediaResponseDto;
 import com.politicia.coreservice.repository.MediaRepository;
 import org.junit.jupiter.api.Assertions;
@@ -39,13 +39,13 @@ class MediaServiceTest {
                 .mediaType(MediaType.IMAGE)
                 .build();
 
-        MediaRequestDto mediaRequestDto = MediaRequestDto.builder()
+        MediaPostRequestDto mediaPostRequestDto = MediaPostRequestDto.builder()
                 .mediaType(MediaType.IMAGE)
                 .build();
 
         //when
         when(mediaRepository.save(any(Media.class))).thenReturn(media);
-        mediaService.createMedia(mediaRequestDto);
+        mediaService.createMedia(mediaPostRequestDto);
         //then
         verify(mediaRepository, times(1)).save(any(Media.class));
     }

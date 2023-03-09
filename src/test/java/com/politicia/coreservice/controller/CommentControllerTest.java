@@ -1,9 +1,7 @@
 package com.politicia.coreservice.controller;
 
-import com.politicia.coreservice.domain.Comment;
-import com.politicia.coreservice.domain.Post;
-import com.politicia.coreservice.domain.User;
-import com.politicia.coreservice.dto.request.CommentRequestDto;
+import com.politicia.coreservice.dto.request.comment.CommentPatchRequestDto;
+import com.politicia.coreservice.dto.request.comment.CommentPostRequestDto;
 import com.politicia.coreservice.service.CommentService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -14,11 +12,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static jdk.internal.org.objectweb.asm.util.CheckClassAdapter.verify;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CommentController.class)
@@ -41,8 +37,8 @@ class CommentControllerTest {
                                         "    \"text\": \"text\"\n" +
                                         "}"
                                 ))
-                        .andExpect(status().isCreated());
-        Mockito.verify(commentService, times(1)).createComment(any(CommentRequestDto.class));
+                        .andExpect(status().isOk());
+        Mockito.verify(commentService, times(1)).createComment(any(CommentPostRequestDto.class));
 
     }
 
@@ -60,19 +56,21 @@ class CommentControllerTest {
                                 }"""
                         ))
                 .andExpect(status().isOk());
-        Mockito.verify(commentService, times(1)).editComment(1L, any(CommentRequestDto.class));
+        Mockito.verify(commentService, times(1)).editComment(1L, any(CommentPatchRequestDto.class));
 
     }
 
     @Test
     void testDeleteComment() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/delete/1"))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/comment/1"))
                 .andExpect(status().isOk());
         Mockito.verify(commentService, times(1)).deleteComment(1L);
     }
 
     @Test
-    void testGetComments() {
-        
+    void testGetComments() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/comment/1"))
+                .andExpect(status().isOk());
+//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
     }
 }

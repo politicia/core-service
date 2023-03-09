@@ -2,7 +2,8 @@ package com.politicia.coreservice.service;
 
 import com.politicia.coreservice.domain.Post;
 import com.politicia.coreservice.domain.User;
-import com.politicia.coreservice.dto.request.PostRequestDto;
+import com.politicia.coreservice.dto.request.post.PostPatchRequestDto;
+import com.politicia.coreservice.dto.request.post.PostPostRequestDto;
 import com.politicia.coreservice.dto.response.PostResponseDto;
 import com.politicia.coreservice.repository.PostRepository;
 import com.politicia.coreservice.repository.UserRepository;
@@ -48,7 +49,7 @@ class PostServiceTest {
                 .title("title")
                 .text("text")
                 .build();
-        PostRequestDto postRequestDto = PostRequestDto.builder()
+        PostPostRequestDto postPostRequestDto = PostPostRequestDto.builder()
                 .userId(user.getId())
                 .title("title")
                 .text("text")
@@ -56,7 +57,7 @@ class PostServiceTest {
         //when
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(postRepository.save(any(Post.class))).thenReturn(expectedPost);
-        postService.createPost(postRequestDto);
+        postService.createPost(postPostRequestDto);
 
         //then
         verify(postRepository, times(1)).save(any(Post.class));
@@ -74,15 +75,15 @@ class PostServiceTest {
                 .user(user)
                 .title("title")
                 .build();
-        PostRequestDto editRequest = PostRequestDto.builder()
+        PostPatchRequestDto postPatchRequestDto = PostPatchRequestDto.builder()
                 .title("new title")
                 .build();
         //when
         when(postRepository.findById(any(Long.class))).thenReturn(Optional.of(expectedPost));
-        postService.editPost(1L, editRequest);
+        postService.editPost(1L, postPatchRequestDto);
 
         //then
-        Assertions.assertEquals(expectedPost.getTitle(), editRequest.getTitle());
+        Assertions.assertEquals(expectedPost.getTitle(), postPatchRequestDto.getTitle());
     }
 
     @Test

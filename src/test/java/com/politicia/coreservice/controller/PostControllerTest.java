@@ -1,7 +1,8 @@
 package com.politicia.coreservice.controller;
 
 import com.politicia.coreservice.domain.User;
-import com.politicia.coreservice.dto.request.PostRequestDto;
+import com.politicia.coreservice.dto.request.post.PostPatchRequestDto;
+import com.politicia.coreservice.dto.request.post.PostPostRequestDto;
 import com.politicia.coreservice.dto.response.PostResponseDto;
 import com.politicia.coreservice.service.PostService;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -42,8 +42,7 @@ class PostControllerTest {
                 .nationality("country")
                 .profilePic("https://profile.pic")
                 .build();
-        PostRequestDto requestDto = PostRequestDto.builder()
-                .userId(user.getId())
+        PostPatchRequestDto requestDto = PostPatchRequestDto.builder()
                 .title("title")
                 .text("text")
                 .build();
@@ -60,7 +59,7 @@ class PostControllerTest {
                                 "}"
                         ))
                 .andExpect(status().isCreated());
-        verify(postService, times(1)).createPost(any(PostRequestDto.class));
+        verify(postService, times(1)).createPost(any(PostPostRequestDto.class));
     }
 
     @Test
@@ -72,8 +71,7 @@ class PostControllerTest {
                 .nationality("country")
                 .profilePic("https://profile.pic")
                 .build();
-        PostRequestDto requestDto = PostRequestDto.builder()
-                .userId(user.getId())
+        PostPatchRequestDto requestDto = PostPatchRequestDto.builder()
                 .title("title")
                 .text("text")
                 .build();
@@ -96,7 +94,7 @@ class PostControllerTest {
                         "}"
                 ))
                 .andExpect(status().isOk());
-        verify(postService, times(1)).editPost(any(Long.class), any(PostRequestDto.class));
+        verify(postService, times(1)).editPost(any(Long.class), any(PostPatchRequestDto.class));
 
     }
 
