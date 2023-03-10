@@ -18,10 +18,13 @@ public class UserService {
 
     public UserResponseDto createUser(UserPostRequestDto userRequestDto) {
 
+        //upload media and get url
+        String profilePicUrl = "";
+
         User user = User.builder()
                 .name(userRequestDto.getName())
                 .nationality(userRequestDto.getNationality())
-                .profilePic(userRequestDto.getProfilePic())
+                .profilePic(profilePicUrl)
                 .build();
         User newUser = userRepository.save(user);
         return UserResponseDto.builder()

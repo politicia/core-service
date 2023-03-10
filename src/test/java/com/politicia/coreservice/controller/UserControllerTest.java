@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.multipart.MultipartFile;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -52,9 +54,10 @@ class UserControllerTest {
     @Test
     void createUser() throws Exception {
         //given
+        MultipartFile file = new MockMultipartFile("name.txt", new byte[0]);
         UserPostRequestDto userRequestDto = UserPostRequestDto.builder()
                 .name("test")
-                .profilePic("https://profile.pic")
+                .profilePic(file)
                 .nationality("testCountry")
                 .build();
         UserResponseDto expectedUser = UserResponseDto.builder()

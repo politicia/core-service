@@ -10,6 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +33,10 @@ class UserServiceTest {
     @Test
     void testSignUp() {
         //given
+        MultipartFile file = new MockMultipartFile("file.txt", new byte[0]);
         UserPostRequestDto newUser = UserPostRequestDto.builder()
                 .name("newUser")
-                .profilePic("https://profile.pic")
+                .profilePic(file)
                 .nationality("korea")
                 .build();
         User expectedUser = User.builder()
