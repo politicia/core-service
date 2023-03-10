@@ -5,6 +5,7 @@ import com.politicia.coreservice.domain.User;
 import com.politicia.coreservice.dto.request.post.PostPatchRequestDto;
 import com.politicia.coreservice.dto.request.post.PostPostRequestDto;
 import com.politicia.coreservice.dto.response.PostResponseDto;
+import com.politicia.coreservice.dto.response.UserResponseDto;
 import com.politicia.coreservice.repository.PostRepository;
 import com.politicia.coreservice.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -56,7 +57,7 @@ public class PostService {
         Post post = postRepository.findById(id).get();
         return PostResponseDto.builder()
                 .postId(post.getId())
-                .user(post.getUser())
+                .user(post.getUser().toDto())
                 .title(post.getTitle())
                 .text(post.getText())
                 .build();
@@ -77,17 +78,17 @@ public class PostService {
         return posts.map(Post::toDto);
     }
 
-    public Page<PostResponseDto> getPostsByMostViews() {
-        return null;
-    }
-
-    public Page<PostResponseDto> getPostsByMostLikes() {
-        return null;
-    }
-
-    public Page<PostResponseDto> getHottestPosts(LocalDateTime localDateTime) {
-        return null;
-    }
+//    public Page<PostResponseDto> getPostsByMostViews() {
+//        return null;
+//    }
+//
+//    public Page<PostResponseDto> getPostsByMostLikes() {
+//        return null;
+//    }
+//
+//    public Page<PostResponseDto> getHottestPosts(LocalDateTime localDateTime) {
+//        return null;
+//    }
 
 //    public Page<PostResponseDto> getPostsByTarget(Long targetId, int page) {
 //

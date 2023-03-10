@@ -159,12 +159,12 @@ class PostControllerTest {
                 .build();
         PostResponseDto postA = PostResponseDto.builder()
                 .postId(1L)
-                .user(user)
+                .user(user.toDto())
                 .title("title")
                 .build();
         PostResponseDto postB = PostResponseDto.builder()
                 .postId(2L)
-                .user(user)
+                .user(user.toDto())
                 .title("title")
                 .build();
         Page<PostResponseDto> posts = new PageImpl<>(List.of(postA, postB));

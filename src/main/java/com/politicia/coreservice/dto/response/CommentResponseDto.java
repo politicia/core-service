@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter @Setter @Builder
 public class CommentResponseDto {
     private Long commentId;
-    private User user;
+    private UserResponseDto user;
     private Long postId;
     private String text;
     private LocalDateTime createdAt;

@@ -41,7 +41,7 @@ public class Post extends EntityPrefix {
     public PostResponseDto toDto() {
         return PostResponseDto.builder()
                 .postId(id)
-                .user(user)
+                .user(user.toDto())
                 .title(title)
                 .text(text)
                 .target(target)
