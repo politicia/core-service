@@ -3,6 +3,9 @@ package com.politicia.coreservice.dto.request.user;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.beans.ConstructorProperties;
 
 @Getter
 public class UserPatchRequestDto {
@@ -11,6 +14,12 @@ public class UserPatchRequestDto {
     @Nullable
     private String nationality;
     @Nullable
-    @Pattern(regexp = "[(http(s)?):\\/\\/(www\\.)?a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)")
-    private String profilePic;
+    private MultipartFile profilePic;
+
+    @ConstructorProperties({"name", "nationality", "profilePic"})
+    public UserPatchRequestDto(String name, String nationality, MultipartFile profilePic) {
+        this.name = name;
+        this.nationality = nationality;
+        this.profilePic = profilePic;
+    }
 }

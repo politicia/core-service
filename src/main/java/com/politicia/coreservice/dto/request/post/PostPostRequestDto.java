@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.beans.ConstructorProperties;
+
 @Getter @Builder
 public class PostPostRequestDto {
 
@@ -19,4 +21,12 @@ public class PostPostRequestDto {
     private String text;
     @Nullable
     private Long targetId;
+
+    @ConstructorProperties({"userId", "title", "text", "targetId"})
+    public PostPostRequestDto(Long userId, String title, String text, Long targetId) {
+        this.userId = userId;
+        this.title = title;
+        this.text = text;
+        this.targetId = targetId;
+    }
 }

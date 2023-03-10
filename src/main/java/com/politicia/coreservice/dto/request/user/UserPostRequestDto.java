@@ -1,9 +1,13 @@
 package com.politicia.coreservice.dto.request.user;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.beans.ConstructorProperties;
 
 @Getter @Builder
 public class UserPostRequestDto {
@@ -12,7 +16,13 @@ public class UserPostRequestDto {
     private String name;
     @NotBlank
     private String nationality;
-    @NotBlank
-    @Pattern(regexp = "[(http(s)?):\\/\\/(www\\.)?a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)")
-    private String profilePic;
+    @NotNull
+    private MultipartFile profilePic;
+
+    @ConstructorProperties({"name", "nationality", "profilePic"})
+    public UserPostRequestDto(String name, String nationality, MultipartFile profilePic) {
+        this.name = name;
+        this.nationality = nationality;
+        this.profilePic = profilePic;
+    }
 }
