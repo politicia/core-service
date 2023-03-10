@@ -29,7 +29,7 @@ public class Comment extends EntityPrefix {
     public CommentResponseDto toDto() {
         return CommentResponseDto.builder()
                 .commentId(id)
-                .user(user)
+                .user(user.toDto())
                 .postId(post.getId())
                 .text(text)
                 .createdAt(getCreatedAt())

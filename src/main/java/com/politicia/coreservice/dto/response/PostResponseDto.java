@@ -13,7 +13,7 @@ import java.util.List;
 public class PostResponseDto {
 
     private Long postId;
-    private User user;
+    private UserResponseDto user;
     private String title;
     private String text;
     private Target target;

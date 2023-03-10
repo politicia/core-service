@@ -77,7 +77,7 @@ class PostControllerTest {
                 .build();
         PostResponseDto postResponseDto = PostResponseDto.builder()
                 .postId(1L)
-                .user(user)
+                .user(user.toDto())
                 .title("titleEdited")
                 .text("textEdited")
                 .build();
@@ -143,11 +143,11 @@ class PostControllerTest {
         //when
         when(postService.getPostsByDate(date, 0)).thenReturn(posts);
         //then
-        mockMvc.perform(get("/post/list?date=2023-03-05&page=0"))
+        mockMvc.perform(get(String.format("/post/list?date=%s&page=0", date)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.postId").value(postA.getPostId()))
-                .andExpect(jsonPath("$.title").value(postA.getTitle()));
+                .andExpect(jsonPath("$.content[0].postId").value(postA.getPostId()))
+                .andExpect(jsonPath("$.content[0].title").value(postA.getTitle()));
     }
 
     @Test
@@ -173,11 +173,11 @@ class PostControllerTest {
         when(postService.getPostsByUser(1L, 0)).thenReturn(posts);
 
         //then
-        mockMvc.perform(get("/post/list?userId=1"))
+        mockMvc.perform(get("/post/list?userId=1&page=0"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.").value(postA.getPostId()))
-                .andExpect(jsonPath("$.title").value(postA.getTitle()));
+                .andExpect(jsonPath("$.content[0].postId").value(postA.getPostId()))
+                .andExpect(jsonPath("$.content[0].title").value(postA.getTitle()));
 
     }
 }

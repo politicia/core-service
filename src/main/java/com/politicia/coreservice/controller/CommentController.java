@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,12 +20,16 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<Void> createComment(CommentPostRequestDto commentPostRequestDto) {
+    public ResponseEntity<Void> createComment(@RequestBody @Validated CommentPostRequestDto commentPostRequestDto) {
         commentService.createComment(commentPostRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
     @PatchMapping("/{commentId}")
-    public ResponseEntity<Void> editComment(@PathVariable Long commentId, @Valid @RequestBody CommentPatchRequestDto commentPatchRequestDto) {
+    public ResponseEntity<Void> editComment(@PathVariable Long commentId, @RequestBody @Validated CommentPatchRequestDto commentPatchRequestDto, Errors errors) {
+        if (errors.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
         commentService.editComment(commentId, commentPatchRequestDto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
