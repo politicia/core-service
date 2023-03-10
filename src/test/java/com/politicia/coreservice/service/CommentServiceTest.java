@@ -100,17 +100,23 @@ class CommentServiceTest {
     @Test
     void getCommentListByPost() {
         //given
+        User user = User.builder()
+                .id(1L)
+                .build();
         Post post = Post.builder()
                 .id(1L)
+                .user(user)
                 .build();
         Comment commentA = Comment.builder()
                 .id(1L)
                 .post(post)
+                .user(user)
                 .text("textA")
                 .build();
         Comment commentB = Comment.builder()
                 .id(2L)
                 .post(post)
+                .user(user)
                 .text("textB")
                 .build();
         Page<Comment> expectedComments = new PageImpl<>(new ArrayList<>(List.of(commentA, commentB)));

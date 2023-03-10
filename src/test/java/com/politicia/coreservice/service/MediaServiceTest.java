@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -91,7 +92,7 @@ class MediaServiceTest {
         Page<Media> mediaPage = new PageImpl<>(new ArrayList<>(List.of(mediaA, mediaB)));
 
         //when
-        when(mediaRepository.findByPost(any(Post.class))).thenReturn(mediaPage);
+        when(mediaRepository.findByPost(any(Post.class), any(Pageable.class))).thenReturn(mediaPage);
         List<MediaResponseDto> result = mediaService.getMediaListByPost(post.getId());
         //then
         Assertions.assertEquals(result.get(0).getMediaId(), mediaA.getId());

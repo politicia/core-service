@@ -1,5 +1,7 @@
 package com.politicia.coreservice.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.politicia.coreservice.domain.Comment;
 import com.politicia.coreservice.domain.User;
 import com.politicia.coreservice.dto.request.comment.CommentPatchRequestDto;
@@ -23,6 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -54,15 +57,16 @@ class CommentControllerTest {
 
     @Test
     void testEditComment() throws Exception {
+
+        CommentPatchRequestDto responseBody = CommentPatchRequestDto
+                .builder()
+                .text("newText")
+                .build();
+        ObjectMapper mapper = new JsonMapper();
         mockMvc.perform(MockMvcRequestBuilders.patch("/comment/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
-                        .content("""
-                                {
-                                    "text": "newText"
-                                }"""
-                        ))
+                        .content(mapper.writeValueAsString(responseBody)))
                 .andExpect(status().isOk());
         Mockito.verify(commentService, times(1)).editComment(eq(1L), any(CommentPatchRequestDto.class));
 
@@ -84,23 +88,23 @@ class CommentControllerTest {
         CommentResponseDto commentA = CommentResponseDto
                 .builder()
                 .commentId(1L)
-                .user(user)
+                .user(user.toDto())
                 .text("text")
                 .build();
         CommentResponseDto commentB = CommentResponseDto
                 .builder()
                 .commentId(2L)
-                .user(user)
+                .user(user.toDto())
                 .text("text2")
                 .build();
 
         Page<CommentResponseDto> expectedDto = new PageImpl<>(List.of(commentA, commentB));
         //when
         when(commentService.getCommentListByUser(1L, 0)).thenReturn(expectedDto);
-        mockMvc.perform(MockMvcRequestBuilders.get("/comment?userId=1"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/comment?userId=1&page=0"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.postId").value(postA.getPostId()))
-                .andExpect(jsonPath("$.title").value(postA.getTitle()));
+                .andExpect(jsonPath("$.content[0].commentId").value(commentA.getCommentId()))
+                .andExpect(jsonPath("$.content[1].commentId").value(commentB.getCommentId()));
     }
 }
