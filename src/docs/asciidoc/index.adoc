@@ -1,0 +1,49 @@
+= REST Docs 문서 만들기 (글의 제목)
+yanychoi.github.io
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs // 문서에 표기되는 코드들의 하이라이팅을 highlightjs를 사용
+:toc: left // toc (Table Of Contents)를 문서의 좌측에 두기
+:toclevels: 2
+:sectlinks:
+
+[[Post-API]]
+== Post API
+
+[[Post-Create]]
+=== Post POST
+operation::post-post[snippets='http-request,path-parameters,http-response,response-fields']
+
+[[Post-Read]]
+=== Post GET
+operation::post-get-single[snippets='http-request,path-parameters,http-response,response-fields']
+
+[[Post-Update]]
+=== Post PATCH
+operation::post-patch[snippets='http-request,path-parameters,http-response,response-fields']
+
+[[Post-Delete]]
+=== Post DELETE
+operation::post-delete[snippets='http-request,path-parameters,http-response,response-fields']
+
+
+
+[[Comment-API]]
+== Comment API
+
+[[Comment-Creation]]
+=== Comment POST
+operation::comment-post[snippets='http-request,path-parameters,http-response,response-fields']
+
+[[Comment-Edit]]
+=== Comment PATCH
+operation::comment-patch[snippets='http-request,path-parameters,http-response,response-fields']
+
+[[Comment-Deletion]]
+=== Comment DELETE
+operation::comment-delete[snippets='http-request,path-parameters,http-response,response-fields']
+
+[[Comment-Get]]
+=== Comment GET
+operation::comment-get[snippets='http-request,path-parameters,http-response,response-fields']
+

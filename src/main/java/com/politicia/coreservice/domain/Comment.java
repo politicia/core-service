@@ -5,6 +5,8 @@ import com.politicia.coreservice.dto.response.PostResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter @Setter @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends EntityPrefix {
@@ -24,6 +26,8 @@ public class Comment extends EntityPrefix {
         this.user = user;
         this.post = post;
         this.text = text;
+        setCreatedAt(LocalDateTime.now());
+        setUpdatedAt(LocalDateTime.now());
     }
 
     public CommentResponseDto toDto() {

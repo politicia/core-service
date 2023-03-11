@@ -5,6 +5,7 @@ import com.politicia.coreservice.dto.response.PostResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -36,6 +37,8 @@ public class Post extends EntityPrefix {
         this.title = title;
         this.text = text;
         this.target = target;
+        setCreatedAt(LocalDateTime.now());
+        setUpdatedAt(LocalDateTime.now());
     }
 
     public PostResponseDto toDto() {
@@ -45,6 +48,8 @@ public class Post extends EntityPrefix {
                 .title(title)
                 .text(text)
                 .target(target)
+                .createdAt(getCreatedAt())
+                .updatedAt(getUpdatedAt())
                 .build();
 
     }

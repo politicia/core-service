@@ -3,6 +3,8 @@ package com.politicia.coreservice.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter @Setter @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Media extends EntityPrefix {
@@ -28,5 +30,7 @@ public class Media extends EntityPrefix {
         this.src = src;
         this.thumbnail = thumbnail;
         this.post = post;
+        setCreatedAt(LocalDateTime.now());
+        setUpdatedAt(LocalDateTime.now());
     }
 }
