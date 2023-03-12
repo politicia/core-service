@@ -12,12 +12,17 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.multipart.MultipartFile;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(UserController.class)
@@ -45,13 +50,26 @@ class UserControllerTest {
         when(userService.getUser(1L)).thenReturn(user.toDto());
         //then
 
-        mockMvc.perform(get("/user/1"))
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/user/{userId}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(user.getId()))
                 .andExpect(jsonPath("$.name").value(user.getName()))
                 .andExpect(jsonPath("$.profilePic").value(user.getProfilePic()))
-                .andExpect(jsonPath("$.nationality").value(user.getNationality()));
+                .andExpect(jsonPath("$.nationality").value(user.getNationality()))
+                .andDo(document("user-get",
+                        pathParameters(
+                                parameterWithName("userId").description("User ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").type(JsonFieldType.NUMBER).description("User ID"),
+                                fieldWithPath("name").type(JsonFieldType.STRING).description("Username"),
+                                fieldWithPath("nationality").type(JsonFieldType.STRING).description("User's Nationality"),
+                                fieldWithPath("profilePic").type(JsonFieldType.STRING).description("User's Profile Image"),
+                                fieldWithPath("createdAt").type(JsonFieldType.STRING).description("User Creation Date"),
+                                fieldWithPath("updatedAt").type(JsonFieldType.STRING).description("User Last Updated Date")
+                        )
+                ));
 
     }
 
@@ -74,7 +92,7 @@ class UserControllerTest {
         //when
         when(userService.createUser(userRequestDto)).thenReturn(expectedUser);
         //then
-        mockMvc.perform(post("/user")
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/user")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
@@ -84,7 +102,14 @@ class UserControllerTest {
                                 "    \"profilePic\": \"https://profile.pic\"\n" +
                                 "}"
                         ))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andDo(document("user-create",
+                        requestFields(
+                                fieldWithPath("name").type(JsonFieldType.STRING).description("New Username"),
+                                fieldWithPath("nationality").type(JsonFieldType.STRING).description("New nationality"),
+                                fieldWithPath("profilePic").type(JsonFieldType.STRING).description("New Profile image")
+                        )
+                ));
 
     }
 }
