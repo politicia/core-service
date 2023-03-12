@@ -7,6 +7,17 @@ yanychoi.github.io
 :toclevels: 2
 :sectlinks:
 
+[[User-API]]
+== User API
+
+[[User-Create]]
+=== User POST
+operation::user-create[snippets='http-request,path-parameters,http-response,response-fields']
+
+[[User-Read]]
+=== User GET
+operation::user-get[snippets='http-request,path-parameters,http-response,response-fields']
+
 [[Post-API]]
 == Post API
 
