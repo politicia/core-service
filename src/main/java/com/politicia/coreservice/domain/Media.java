@@ -1,5 +1,6 @@
 package com.politicia.coreservice.domain;
 
+import com.politicia.coreservice.dto.response.MediaResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,5 +33,17 @@ public class Media extends EntityPrefix {
         this.post = post;
         setCreatedAt(LocalDateTime.now());
         setUpdatedAt(LocalDateTime.now());
+    }
+
+    public MediaResponseDto toDto() {
+        return MediaResponseDto.builder()
+                .mediaId(id)
+                .postId(post.getId())
+                .mediaType(mediaType)
+                .src(src)
+                .thumbnail(thumbnail)
+                .createdAt(getCreatedAt())
+                .updatedAt(getUpdatedAt())
+                .build();
     }
 }
