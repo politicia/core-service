@@ -4,7 +4,6 @@ import com.politicia.coreservice.dto.request.comment.CommentPatchRequestDto;
 import com.politicia.coreservice.dto.request.comment.CommentPostRequestDto;
 import com.politicia.coreservice.dto.response.CommentResponseDto;
 import com.politicia.coreservice.service.CommentService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
