@@ -1,5 +1,6 @@
 package com.politicia.coreservice.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.politicia.coreservice.domain.User;
 import com.politicia.coreservice.dto.request.user.UserPostRequestDto;
 import com.politicia.coreservice.dto.response.UserResponseDto;
@@ -20,8 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(UserController.class)
@@ -75,10 +75,9 @@ class UserControllerTest {
     @Test
     void createUser() throws Exception {
         //given
-        MultipartFile file = new MockMultipartFile("name.txt", new byte[0]);
+        MockMultipartFile file = new MockMultipartFile("file", "file.png", MediaType.IMAGE_PNG_VALUE, "Image".getBytes());
         UserPostRequestDto userRequestDto = UserPostRequestDto.builder()
                 .name("test")
-                .profilePic(file)
                 .nationality("testCountry")
                 .build();
         UserResponseDto expectedUser = UserResponseDto.builder()
@@ -88,25 +87,20 @@ class UserControllerTest {
                 .nationality("testCountry")
                 .build();
 
+        MockMultipartFile jsonFile = new MockMultipartFile("body", "", "application/json", new ObjectMapper().writeValueAsString(userRequestDto).getBytes());
+
         //when
         when(userService.createUser(userRequestDto)).thenReturn(expectedUser);
         //then
-        mockMvc.perform(RestDocumentationRequestBuilders.post("/user")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .characterEncoding("UTF-8")
-                        .content("{\n" +
-                                "    \"name\": \"test\",\n" +
-                                "    \"nationality\": \"testCountry\",\n" +
-                                "    \"profilePic\": \"https://profile.pic\"\n" +
-                                "}"
-                        ))
+        mockMvc.perform(RestDocumentationRequestBuilders.multipart("/user")
+                .file(file)
+                .file(jsonFile)
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE))
                 .andExpect(status().isCreated())
                 .andDo(document("user-create",
-                        requestFields(
-                                fieldWithPath("name").type(JsonFieldType.STRING).description("New Username"),
-                                fieldWithPath("nationality").type(JsonFieldType.STRING).description("New nationality"),
-                                fieldWithPath("profilePic").type(JsonFieldType.STRING).description("New Profile image")
+                        requestParts(
+                                partWithName("body").description("JSON body"),
+                                partWithName("file").description("New Profile image")
                         )
                 ));
 
