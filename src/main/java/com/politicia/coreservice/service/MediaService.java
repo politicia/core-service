@@ -11,6 +11,7 @@ import com.politicia.coreservice.repository.PostRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -22,13 +23,14 @@ import java.util.UUID;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@PropertySource("aws.yaml")
 public class MediaService {
 
 
     private final AmazonS3 amazonS3;
     private final MediaRepository mediaRepository;
     private final PostRepository postRepository;
-    @Value("${aws.MEDIA_BUCKET_NAME}")
+    @Value("${MEDIA_BUCKET_NAME}")
     private String mediaBucket;
 
     public void createMedia(MediaPostRequestDto mediaPostRequestDto) throws IOException {
@@ -47,6 +49,7 @@ public class MediaService {
         mediaPostRequestDto.getFile().transferTo(file);
         amazonS3.putObject(mediaBucket, key, file);
         mediaRepository.save(media);
+        file.delete();
     }
     public void deleteMedia(Long mediaId) {
         Media media = mediaRepository.findById(mediaId).get();
