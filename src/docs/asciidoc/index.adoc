@@ -1,4 +1,4 @@
-= REST Docs 문서 만들기 (글의 제목)
+= Politicia Sports Rest API Document
 yanychoi.github.io
 :doctype: book
 :icons: font
@@ -12,7 +12,7 @@ yanychoi.github.io
 
 [[User-Create]]
 === User POST
-operation::user-create[snippets='http-request,path-parameters,http-response,response-fields']
+operation::user-create[snippets='http-request,http-response']
 
 [[User-Read]]
 === User GET
@@ -23,7 +23,7 @@ operation::user-get[snippets='http-request,path-parameters,http-response,respons
 
 [[Post-Create]]
 === Post POST
-operation::post-post[snippets='http-request,path-parameters,http-response,response-fields']
+operation::post-post[snippets='http-request,http-response']
 
 [[Post-Read]]
 === Post GET
@@ -31,28 +31,40 @@ operation::post-get-single[snippets='http-request,path-parameters,http-response,
 
 [[Post-Update]]
 === Post PATCH
-operation::post-patch[snippets='http-request,path-parameters,http-response,response-fields']
+operation::post-patch[snippets='http-request,path-parameters,http-response']
 
 [[Post-Delete]]
 === Post DELETE
-operation::post-delete[snippets='http-request,path-parameters,http-response,response-fields']
+operation::post-delete[snippets='http-request,path-parameters,http-response']
 
+== Media API
 
+[[Media-Create]]
+=== Media POST
+operation::media-post[snippets='http-request,http-response']
+
+[[Media-Read]]
+=== Media GET
+operation::media-get[snippets='http-request,path-parameters,http-response,response-fields']
+
+[[Media-Delete]]
+=== Media DELETE
+operation::media-delete[snippets='http-request,path-parameters,http-response']
 
 [[Comment-API]]
 == Comment API
 
 [[Comment-Creation]]
 === Comment POST
-operation::comment-post[snippets='http-request,path-parameters,http-response,response-fields']
+operation::comment-post[snippets='http-request,http-response']
 
 [[Comment-Edit]]
 === Comment PATCH
-operation::comment-patch[snippets='http-request,path-parameters,http-response,response-fields']
+operation::comment-patch[snippets='http-request,http-response']
 
 [[Comment-Deletion]]
 === Comment DELETE
-operation::comment-delete[snippets='http-request,path-parameters,http-response,response-fields']
+operation::comment-delete[snippets='http-request,path-parameters,http-response']
 
 [[Comment-Get]]
 === Comment GET
