@@ -61,7 +61,7 @@ class MediaServiceTest {
                 .src("https://media.src")
                 .mediaType(MediaType.IMAGE)
                 .build();
-        MultipartFile multipartFile = new MockMultipartFile("name.txt", new byte[0]);
+        MultipartFile multipartFile = new MockMultipartFile("data", "filename.png", "image", "some xml".getBytes());
 
         MediaPostRequestDto mediaPostRequestDto = MediaPostRequestDto.builder()
                 .postId(post.getId())

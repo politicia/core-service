@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequestMapping("media")
@@ -21,10 +20,11 @@ public class MediaController {
     private final MediaService mediaService;
 
     @PostMapping
-    public ResponseEntity<Void> createMedia(@RequestBody @Validated MediaPostRequestDto mediaPostRequestDto) {
+    public ResponseEntity<Void> createMedia(@RequestPart MultipartFile file, @RequestPart @Validated MediaPostRequestDto body) {
         try {
-            mediaService.createMedia(mediaPostRequestDto);
-            return ResponseEntity.status(HttpStatus.OK).build();
+            body.setFile(file);
+            mediaService.createMedia(body);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         }
         catch (IOException e) {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
