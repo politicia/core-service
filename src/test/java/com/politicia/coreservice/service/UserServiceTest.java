@@ -1,5 +1,6 @@
 package com.politicia.coreservice.service;
 
+import com.amazonaws.services.s3.AmazonS3;
 import com.politicia.coreservice.domain.User;
 import com.politicia.coreservice.dto.request.user.UserPostRequestDto;
 import com.politicia.coreservice.dto.response.UserResponseDto;
@@ -11,14 +12,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -29,9 +32,12 @@ class UserServiceTest {
 
     @Mock
     UserRepository userRepository;
+    @Mock
+    AmazonS3 amazonS3;
 
     @Test
-    void testSignUp() {
+    void testSignUp() throws Exception {
+        ReflectionTestUtils.setField(userService, "mediaBucket", "MEDIA_BUCKET");
         //given
         MultipartFile file = new MockMultipartFile("file.txt", new byte[0]);
         UserPostRequestDto newUser = UserPostRequestDto.builder()
@@ -57,6 +63,7 @@ class UserServiceTest {
         Assertions.assertEquals(actualUser.getProfilePic(), expectedUser.getProfilePic());
         Assertions.assertEquals(actualUser.getCreatedAt(), expectedUser.getCreatedAt());
         Assertions.assertEquals(actualUser.getUpdatedAt(), expectedUser.getUpdatedAt());
+        verify(amazonS3, times(1)).putObject(any(String.class), any(String.class), any(File.class));
     }
 
     @Test

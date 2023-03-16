@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("user")
 @RequiredArgsConstructor
@@ -24,9 +26,14 @@ public class UserController {
     }
     @PostMapping
     public ResponseEntity<Void> createUser(@RequestPart MultipartFile file, @RequestPart UserPostRequestDto body) {
-        body.setProfilePic(file);
-        userService.createUser(body);
+        try {
+            body.setProfilePic(file);
+            userService.createUser(body);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        }
+        catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 }
