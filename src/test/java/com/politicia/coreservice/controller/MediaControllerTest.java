@@ -57,7 +57,7 @@ class MediaControllerTest {
         );
         MediaPostRequestDto postRequestDto = MediaPostRequestDto
                 .builder()
-//                .postId(1L)
+                .postId(1L)
                 .mediaType(com.politicia.coreservice.domain.MediaType.IMAGE)
                 .build();
         MockMultipartFile jsonFile = new MockMultipartFile("body", "", "application/json", new ObjectMapper().writeValueAsString(postRequestDto).getBytes());

@@ -42,8 +42,8 @@ public class MediaService {
 
         String fileName = mediaPostRequestDto.getFile().getName();
         String ext = fileName.substring(fileName.lastIndexOf(".") + 1);
-        String key = String.format("%s-%s-%s.%s", UUID.randomUUID().toString(), media.getMediaType(), media.getCreatedAt(), ext);
-        File file = new File(key);
+        String key = String.format("%s/%s-%s.%s", media.getMediaType(), UUID.randomUUID().toString(), media.getCreatedAt(), ext);
+        File file = new File("file");
 
         media.setSrc(key);
         mediaPostRequestDto.getFile().transferTo(file);

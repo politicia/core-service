@@ -18,8 +18,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class PostService {
 
     private final PostRepository postRepository;

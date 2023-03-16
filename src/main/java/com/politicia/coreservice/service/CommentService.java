@@ -9,6 +9,7 @@ import com.politicia.coreservice.dto.response.CommentResponseDto;
 import com.politicia.coreservice.repository.CommentRepository;
 import com.politicia.coreservice.repository.PostRepository;
 import com.politicia.coreservice.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CommentService {
 
