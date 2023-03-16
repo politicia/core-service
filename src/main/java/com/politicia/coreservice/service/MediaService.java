@@ -34,6 +34,8 @@ public class MediaService {
     private final PostRepository postRepository;
     @Value("${MEDIA_BUCKET_NAME}")
     private String mediaBucket;
+    @Value("${CLOUDFRONT_MEDIA_URL_PREFIX}")
+    private String mediaPrefix;
 
     public void createMedia(MediaPostRequestDto mediaPostRequestDto) throws IOException {
         Post post = postRepository.findById(mediaPostRequestDto.getPostId()).get();
@@ -43,12 +45,12 @@ public class MediaService {
                 .build();
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(mediaPostRequestDto.getFile().getContentType());
-        String fileName = mediaPostRequestDto.getFile().getName();
+        String fileName = mediaPostRequestDto.getFile().getOriginalFilename();
         String ext = fileName.substring(fileName.lastIndexOf(".") + 1);
         String key = String.format("%s/%s-%s.%s", media.getMediaType(), UUID.randomUUID().toString(), media.getCreatedAt(), ext);
 
         InputStream inputStream = mediaPostRequestDto.getFile().getInputStream();
-        media.setSrc(key);
+        media.setSrc(mediaPrefix + '/' + key);
         amazonS3.putObject(mediaBucket, key, inputStream, objectMetadata);
         mediaRepository.save(media);
     }

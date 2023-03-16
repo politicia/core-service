@@ -29,6 +29,8 @@ public class UserService {
     private final AmazonS3 amazonS3;
     @Value("${MEDIA_BUCKET_NAME}")
     private String mediaBucket;
+    @Value("${CLOUDFRONT_MEDIA_URL_PREFIX}")
+    private String mediaPrefix;
     public UserResponseDto createUser(UserPostRequestDto userRequestDto) throws IOException {
 
         //upload media and get url
@@ -36,13 +38,12 @@ public class UserService {
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(userRequestDto.getProfilePic().getContentType());
         InputStream inputStream = userRequestDto.getProfilePic().getInputStream();
-        String src = String.format("%s/%s-%s-%s", "PROFILE_PIC", UUID.randomUUID().toString(), userRequestDto.getName(), userRequestDto.getProfilePic().getOriginalFilename());
-        amazonS3.putObject(mediaBucket, src, inputStream, objectMetadata);
-
+        String key = String.format("%s/%s-%s-%s", "PROFILE_PIC", UUID.randomUUID().toString(), userRequestDto.getName(), userRequestDto.getProfilePic().getOriginalFilename());
+        amazonS3.putObject(mediaBucket, key, inputStream, objectMetadata);
         User user = User.builder()
                 .name(userRequestDto.getName())
                 .nationality(userRequestDto.getNationality())
-                .profilePic(src)
+                .profilePic(mediaPrefix + '/' + key)
                 .build();
         User newUser = userRepository.save(user);
         return UserResponseDto.builder()
