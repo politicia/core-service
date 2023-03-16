@@ -2,6 +2,7 @@ package com.politicia.coreservice.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.politicia.coreservice.domain.Media;
 import com.politicia.coreservice.domain.Post;
 import com.politicia.coreservice.dto.request.media.MediaPostRequestDto;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.UUID;
 
 @Service
@@ -39,17 +41,16 @@ public class MediaService {
                 .post(post)
                 .mediaType(mediaPostRequestDto.getMediaType())
                 .build();
-
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentType(mediaPostRequestDto.getFile().getContentType());
         String fileName = mediaPostRequestDto.getFile().getName();
         String ext = fileName.substring(fileName.lastIndexOf(".") + 1);
         String key = String.format("%s/%s-%s.%s", media.getMediaType(), UUID.randomUUID().toString(), media.getCreatedAt(), ext);
-        File file = new File("file");
 
+        InputStream inputStream = mediaPostRequestDto.getFile().getInputStream();
         media.setSrc(key);
-        mediaPostRequestDto.getFile().transferTo(file);
-        amazonS3.putObject(mediaBucket, key, file);
+        amazonS3.putObject(mediaBucket, key, inputStream, objectMetadata);
         mediaRepository.save(media);
-        file.delete();
     }
     public void deleteMedia(Long mediaId) {
         Media media = mediaRepository.findById(mediaId).get();
