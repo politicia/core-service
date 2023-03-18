@@ -1,6 +1,7 @@
 package com.politicia.coreservice.service;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.politicia.coreservice.domain.Media;
 import com.politicia.coreservice.domain.MediaType;
 import com.politicia.coreservice.domain.Post;
@@ -25,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -74,7 +76,7 @@ class MediaServiceTest {
         mediaService.createMedia(mediaPostRequestDto);
         //then
         verify(mediaRepository, times(1)).save(any(Media.class));
-        verify(amazonS3, times(1)).putObject(any(String.class), any(String.class), any(File.class));
+        verify(amazonS3, times(1)).putObject(any(String.class), any(String.class), any(InputStream.class), any(ObjectMetadata.class));
     }
 
     @Test

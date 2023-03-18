@@ -1,6 +1,7 @@
 package com.politicia.coreservice.service;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.politicia.coreservice.domain.User;
 import com.politicia.coreservice.dto.request.user.UserPostRequestDto;
 import com.politicia.coreservice.dto.response.UserResponseDto;
@@ -16,6 +17,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -63,7 +65,7 @@ class UserServiceTest {
         Assertions.assertEquals(actualUser.getProfilePic(), expectedUser.getProfilePic());
         Assertions.assertEquals(actualUser.getCreatedAt(), expectedUser.getCreatedAt());
         Assertions.assertEquals(actualUser.getUpdatedAt(), expectedUser.getUpdatedAt());
-        verify(amazonS3, times(1)).putObject(any(String.class), any(String.class), any(File.class));
+        verify(amazonS3, times(1)).putObject(any(String.class), any(String.class), any(InputStream.class), any(ObjectMetadata.class));
     }
 
     @Test
