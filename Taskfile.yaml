@@ -3,6 +3,7 @@ version: 3
 tasks:
   docker:
     - ./gradlew build
-    - docker build -t yhc0818/politicia-core-service:latest
+    - docker build -t yhc0818/politicia-core-service:latest .
+    - docker push yhc0818/politicia-core-service
   run:
     - docker run -d -p 8080:8080 --name core-service yhc0818/politicia-core-service:latest
