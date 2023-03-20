@@ -1,4 +1,4 @@
-package com.politicia.coreservice.repository;
+package com.politicia.coreservice.repository.target;
 
 import com.politicia.coreservice.domain.target.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
