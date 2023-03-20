@@ -4,8 +4,11 @@ import com.politicia.coreservice.domain.Record;
 import com.politicia.coreservice.domain.target.Player;
 import com.politicia.coreservice.domain.target.Season;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter @Setter
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class PlayerRecord extends Record {
 
