@@ -100,7 +100,7 @@ class CommentControllerTest {
     }
 
     @Test
-    void testGetComments() throws Exception {
+    void testGetCommentsByUser() throws Exception {
         User user = User
                 .builder()
                 .id(1L)
@@ -134,15 +134,97 @@ class CommentControllerTest {
         Page<CommentResponseDto> expectedDto = new PageImpl<>(List.of(commentA, commentB));
         //when
         when(commentService.getCommentListByUser(1L, 0)).thenReturn(expectedDto);
-        mockMvc.perform(RestDocumentationRequestBuilders.get("/comment?userId={userId}&page={page}", 1L, 0))
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/comment/user/{userId}?page={page}", 1L, 0))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.content[0].commentId").value(commentA.getCommentId()))
                 .andExpect(jsonPath("$.content[1].commentId").value(commentB.getCommentId()))
                 .andDo(
-                        document("comment-get",
+                        document("comment-get-by-user",
+                                pathParameters(
+                                        parameterWithName("userId").description("User ID")
+                                ),
                                 queryParameters(
-                                        parameterWithName("userId").description("User ID"),
+                                        parameterWithName("page").description("Page number")
+                                ),
+                                responseFields(
+                                        fieldWithPath("content").type(JsonFieldType.ARRAY).description("List of Comments"),
+                                        fieldWithPath("content[].commentId").type(JsonFieldType.NUMBER).description("Comment ID"),
+                                        fieldWithPath("content[].user").type(JsonFieldType.OBJECT).description("User info of Comment author"),
+                                        fieldWithPath("content[].user.id").type(JsonFieldType.NUMBER).description("User ID"),
+                                        fieldWithPath("content[].user.name").type(JsonFieldType.STRING).description("Username"),
+                                        fieldWithPath("content[].user.nationality").type(JsonFieldType.STRING).description("User's Nationality"),
+                                        fieldWithPath("content[].user.profilePic").type(JsonFieldType.STRING).description("User's Profile image"),
+                                        fieldWithPath("content[].user.createdAt").type(JsonFieldType.STRING).description("User Creation Date"),
+                                        fieldWithPath("content[].user.updatedAt").type(JsonFieldType.STRING).description("User Last Updated Date"),
+                                        fieldWithPath("content[].postId").type(JsonFieldType.NUMBER).description("Post ID of Comment"),
+                                        fieldWithPath("content[].text").type(JsonFieldType.STRING).description("Comment Text Content"),
+                                        fieldWithPath("content[].createdAt").type(JsonFieldType.STRING).description("Comment Creation Date"),
+                                        fieldWithPath("content[].updatedAt").type(JsonFieldType.STRING).description("Comment Last Updated Date"),
+                                        fieldWithPath("pageable").type(JsonFieldType.STRING).description("Object storing Pageable response"),
+                                        fieldWithPath("last").type(JsonFieldType.BOOLEAN).description("Indicates if this page is the last page"),
+                                        fieldWithPath("totalPages").type(JsonFieldType.NUMBER).description("Total number of pages available"),
+                                        fieldWithPath("totalElements").type(JsonFieldType.NUMBER).description("Total number of elements"),
+                                        fieldWithPath("first").type(JsonFieldType.BOOLEAN).description("Indicates if this page is the first page"),
+                                        fieldWithPath("size").type(JsonFieldType.NUMBER).description("Maximum number of contents inside this page"),
+                                        fieldWithPath("number").type(JsonFieldType.NUMBER).description("Location of current page"),
+                                        fieldWithPath("sort").type(JsonFieldType.OBJECT).description("Object storing if the content is sorted or not"),
+                                        fieldWithPath("sort.empty").type(JsonFieldType.BOOLEAN).description("True if the content is empty"),
+                                        fieldWithPath("sort.unsorted").type(JsonFieldType.BOOLEAN).description("True if the content is unsorted"),
+                                        fieldWithPath("sort.sorted").type(JsonFieldType.BOOLEAN).description("True if the content is sorted"),
+                                        fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER).description("Actual number of Elements in this content"),
+                                        fieldWithPath("empty").type(JsonFieldType.BOOLEAN).description("Indicates if the content is empty")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    void testGetCommentsByPost() throws Exception {
+        User user = User
+                .builder()
+                .id(1L)
+                .name("username")
+                .nationality("test")
+                .profilePic("https://profile.pic")
+                .build();
+        Post post = Post
+                .builder()
+                .id(1L)
+                .title("title")
+                .text("text")
+                .build();
+        CommentResponseDto commentA = Comment
+                .builder()
+                .id(1L)
+                .user(user)
+                .post(post)
+                .text("text")
+                .build()
+                .toDto();
+        CommentResponseDto commentB = Comment
+                .builder()
+                .id(2L)
+                .user(user)
+                .post(post)
+                .text("text2")
+                .build()
+                .toDto();
+
+        Page<CommentResponseDto> expectedDto = new PageImpl<>(List.of(commentA, commentB));
+        //when
+        when(commentService.getCommentListByPost(1L, 0)).thenReturn(expectedDto);
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/comment/post/{postId}?page={page}", 1L, 0))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.content[0].commentId").value(commentA.getCommentId()))
+                .andExpect(jsonPath("$.content[1].commentId").value(commentB.getCommentId()))
+                .andDo(
+                        document("comment-get-by-post",
+                                pathParameters(
+                                        parameterWithName("postId").description("Post ID")
+                                ),
+                                queryParameters(
                                         parameterWithName("page").description("Page number")
                                 ),
                                 responseFields(

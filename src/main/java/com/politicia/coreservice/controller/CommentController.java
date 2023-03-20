@@ -37,15 +37,14 @@ public class CommentController {
         commentService.deleteComment(commentId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
-    @GetMapping
-    public ResponseEntity<Page<CommentResponseDto>> getComments(@RequestParam Long userId, Long postId, int page) {
-        if (userId != null) {
-            return ResponseEntity.ok().body(commentService.getCommentListByUser(userId, page));
-        }
-        if (postId != null) {
-            return ResponseEntity.ok().body(commentService.getCommentListByPost(postId, page));
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<Page<CommentResponseDto>> getCommentsByUserId(@PathVariable Long userId, @RequestParam int page) {
+        return ResponseEntity.ok().body(commentService.getCommentListByUser(userId, page));
+    }
+
+    @GetMapping("/post/{postId}")
+    public ResponseEntity<Page<CommentResponseDto>> getCommentsByPostId(@PathVariable Long postId, @RequestParam int page) {
+        return ResponseEntity.ok().body(commentService.getCommentListByPost(postId, page));
     }
 }
 
