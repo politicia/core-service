@@ -7,6 +7,7 @@ import jakarta.persistence.OneToMany;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,7 +15,7 @@ import java.util.List;
 public class Team extends Target {
 
     @OneToMany(mappedBy = "team")
-    private List<Player> playerList;
+    private List<Player> playerList = new ArrayList<>();
 
     @Builder
     public Team(Long id, String name, String icon) {
