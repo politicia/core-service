@@ -8,13 +8,15 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class TeamService {
     private final TeamRepository teamRepository;
 
-    public void createTeam(TeamPostRequestDto teamPostRequestDto) {
+    public void createTeam(TeamPostRequestDto teamPostRequestDto) throws IOException {
 
     }
 
@@ -22,7 +24,7 @@ public class TeamService {
         return null;
     }
 
-    public void editTeamById(Long teamId, TeamPatchRequestDto teamPatchRequestDto) {
+    public void editTeamById(Long teamId, TeamPatchRequestDto teamPatchRequestDto) throws IOException {
 
     }
 

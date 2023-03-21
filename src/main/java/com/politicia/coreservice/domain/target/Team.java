@@ -33,6 +33,8 @@ public class Team extends Target {
                 .players(playerList.stream()
                         .map(Player::toDto)
                         .toList())
+                .createdAt(getCreatedAt())
+                .updatedAt(getUpdatedAt())
                 .build();
     }
 }
