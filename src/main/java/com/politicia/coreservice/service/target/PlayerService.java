@@ -8,13 +8,15 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class PlayerService {
     private final PlayerRepository playerRepository;
 
-    public void createPlayer(PlayerPostRequestDto playerPostRequestDto) {
+    public void createPlayer(PlayerPostRequestDto playerPostRequestDto) throws IOException {
 
     }
 
@@ -22,7 +24,7 @@ public class PlayerService {
         return null;
     }
 
-    public void editPlayerById(Long playerId, PlayerPatchRequestDto playerPatchRequestDto) {
+    public void editPlayerById(Long playerId, PlayerPatchRequestDto playerPatchRequestDto) throws IOException {
 
     }
 
