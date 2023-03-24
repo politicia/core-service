@@ -1,13 +1,16 @@
 package com.politicia.coreservice.controller;
 
+import com.politicia.coreservice.dto.request.target.player.PlayerPatchRequestDto;
+import com.politicia.coreservice.dto.request.target.player.PlayerPostRequestDto;
 import com.politicia.coreservice.dto.response.target.PlayerResponseDto;
 import com.politicia.coreservice.service.target.PlayerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,5 +25,34 @@ public class PlayerController {
         return ResponseEntity.ok().body(playerResponseDto);
     }
 
+    @PostMapping
+    public ResponseEntity<Void> postPlayer(@RequestPart MultipartFile file, @RequestPart PlayerPostRequestDto body) {
+        try {
+            body.setIcon(file);
+            playerService.createPlayer(body);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @PatchMapping("/{playerId}")
+    public ResponseEntity<Void> editPlayer(@PathVariable Long playerId, @RequestPart MultipartFile file, @RequestPart PlayerPatchRequestDto body) {
+        try {
+            body.setIcon(file);
+            playerService.editPlayerById(playerId, body);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @DeleteMapping("/{playerId}")
+    public ResponseEntity<Void> deletePlayer(@PathVariable Long playerId) {
+        playerService.deletePlayerById(playerId);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
 }
