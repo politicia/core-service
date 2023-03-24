@@ -88,7 +88,7 @@ class TeamControllerTest {
                 .file(body)
                 .contentType(MediaType.MULTIPART_FORM_DATA_VALUE))
                 .andExpect(status().isCreated())
-                .andDo(document("team-create",
+                .andDo(document("team-post",
                         requestParts(
                                 partWithName("body").description("JSON body"),
                                 partWithName("file").description("New Icon image")
@@ -143,5 +143,6 @@ class TeamControllerTest {
                                 parameterWithName("teamId").description("Team ID")
                         )
                         ));
+        verify(teamService, times(1)).deleteTeamById(1L);
     }
 }
