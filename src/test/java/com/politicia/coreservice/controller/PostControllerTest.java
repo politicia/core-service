@@ -2,6 +2,7 @@ package com.politicia.coreservice.controller;
 
 import com.politicia.coreservice.domain.Post;
 import com.politicia.coreservice.domain.User;
+import com.politicia.coreservice.domain.target.Team;
 import com.politicia.coreservice.dto.request.post.PostPatchRequestDto;
 import com.politicia.coreservice.dto.request.post.PostPostRequestDto;
 import com.politicia.coreservice.dto.response.PostResponseDto;
@@ -151,9 +152,15 @@ class PostControllerTest {
                 .nationality("test")
                 .profilePic("https://profile.pic")
                 .build();
+        Team team = Team.builder()
+                .id(1L)
+                .name("name")
+                .icon("icon")
+                .build();
         PostResponseDto expectedDto = Post.builder()
                 .id(1L)
                 .user(user)
+                .target(team)
                 .title("title")
                 .text("text")
                 .build()
@@ -183,7 +190,10 @@ class PostControllerTest {
                                 fieldWithPath("user.updatedAt").type(JsonFieldType.STRING).description("User Last Updated Date"),
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("Post Title"),
                                 fieldWithPath("text").type(JsonFieldType.STRING).description("Post Text Content"),
-                                fieldWithPath("target").type(JsonFieldType.VARIES).description("Post Target"),
+                                fieldWithPath("target").type(JsonFieldType.OBJECT).description("Post Target"),
+                                fieldWithPath("target.targetId").type(JsonFieldType.NUMBER).description("Target ID"),
+                                fieldWithPath("target.name").type(JsonFieldType.STRING).description("Target Name"),
+                                fieldWithPath("target.icon").type(JsonFieldType.STRING).description("Target Icon URL"),
                                 fieldWithPath("mediaList").type(JsonFieldType.ARRAY).description("Post Media List"),
                                 fieldWithPath("commentCount").type(JsonFieldType.NUMBER).description("Number of Comments Of this post"),
                                 fieldWithPath("createdAt").type(JsonFieldType.STRING).description("Post Creation Date"),

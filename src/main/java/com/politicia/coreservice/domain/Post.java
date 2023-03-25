@@ -47,7 +47,7 @@ public class Post extends EntityPrefix {
                 .user(user.toDto())
                 .title(title)
                 .text(text)
-                .target(target)
+                .target(target.toTargetDto())
                 .createdAt(getCreatedAt())
                 .updatedAt(getUpdatedAt())
                 .build();

@@ -16,7 +16,7 @@ public class PostResponseDto {
     private UserResponseDto user;
     private String title;
     private String text;
-    private Target target;
+    private TargetResponseDto target;
     private List<String> mediaList;
     private int commentCount;
     private LocalDateTime createdAt;

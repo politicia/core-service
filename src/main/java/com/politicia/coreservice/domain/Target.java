@@ -1,5 +1,6 @@
 package com.politicia.coreservice.domain;
 
+import com.politicia.coreservice.dto.response.TargetResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,5 +16,13 @@ public abstract class Target extends EntityPrefix {
     private String icon;
     @OneToMany(mappedBy = "target")
     private List<Post> postList;
+
+    public TargetResponseDto toTargetDto() {
+        return TargetResponseDto.builder()
+                .targetId(id)
+                .name(name)
+                .icon(icon)
+                .build();
+    }
 
 }
