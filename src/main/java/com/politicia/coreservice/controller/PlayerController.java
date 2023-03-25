@@ -30,7 +30,7 @@ public class PlayerController {
         try {
             body.setIcon(file);
             playerService.createPlayer(body);
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         }
         catch (IOException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

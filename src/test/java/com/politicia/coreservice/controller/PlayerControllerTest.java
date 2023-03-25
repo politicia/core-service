@@ -60,7 +60,7 @@ class PlayerControllerTest {
                 .age(30)
                 .team(team)
                 .build()
-                .toDto();
+                .toDetailDto();
         //when
         when(playerService.getPlayerById(1L)).thenReturn(player);
         //then
@@ -71,8 +71,6 @@ class PlayerControllerTest {
                 .andExpect(jsonPath("$.name").value(player.getName()))
                 .andExpect(jsonPath("$.icon").value(player.getIcon()))
                 .andExpect(jsonPath("$.age").value(player.getAge()))
-                .andExpect(jsonPath("$.createdAt").value(player.getCreatedAt()))
-                .andExpect(jsonPath("$.updatedAt").value(player.getUpdatedAt()))
                 .andDo(document("player-get",
                         pathParameters(
                                 parameterWithName("playerId").description("Player ID")
@@ -83,13 +81,14 @@ class PlayerControllerTest {
                                 fieldWithPath("icon").type(JsonFieldType.STRING).description("Player Icon URL"),
                                 fieldWithPath("age").type(JsonFieldType.NUMBER).description("Player Age"),
                                 fieldWithPath("team").type(JsonFieldType.OBJECT).description("Player Team"),
-                                fieldWithPath("team.id").type(JsonFieldType.NUMBER).description("Team ID"),
+                                fieldWithPath("team.teamId").type(JsonFieldType.NUMBER).description("Team ID"),
                                 fieldWithPath("team.name").type(JsonFieldType.STRING).description("Team name"),
                                 fieldWithPath("team.icon").type(JsonFieldType.STRING).description("Team Icon URL"),
+                                fieldWithPath("team.players").type(JsonFieldType.NULL).description("Players in team, null in this response"),
                                 fieldWithPath("team.createdAt").type(JsonFieldType.STRING).description("Team Creation Date"),
                                 fieldWithPath("team.updatedAt").type(JsonFieldType.STRING).description("Team Last Updated Date"),
                                 fieldWithPath("createdAt").type(JsonFieldType.STRING).description("Player Creation Date"),
-                                fieldWithPath("createdAt").type(JsonFieldType.STRING).description("Player Last Updated Date")
+                                fieldWithPath("updatedAt").type(JsonFieldType.STRING).description("Player Last Updated Date")
                         )
                         ));
 
@@ -129,6 +128,7 @@ class PlayerControllerTest {
         PlayerPatchRequestDto playerPatchRequestDto = PlayerPatchRequestDto.builder()
                 .name("new player name")
                 .teamId(2L)
+                .age(20)
                 .build();
         MockMultipartFile body = new MockMultipartFile("body", "", "application/json", new ObjectMapper().writeValueAsString(playerPatchRequestDto).getBytes());
 

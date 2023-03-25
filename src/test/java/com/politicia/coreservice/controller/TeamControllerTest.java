@@ -1,6 +1,7 @@
 package com.politicia.coreservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.politicia.coreservice.domain.target.Player;
 import com.politicia.coreservice.domain.target.Team;
 import com.politicia.coreservice.dto.request.target.team.TeamPatchRequestDto;
 import com.politicia.coreservice.dto.request.target.team.TeamPostRequestDto;
@@ -48,25 +49,47 @@ class TeamControllerTest {
                 .name("team")
                 .icon("https://icon")
                 .build();
+        Player player1 = Player.builder()
+                .id(1L)
+                .name("player1")
+                .age(20)
+                .icon("icon")
+                .team(team)
+                .build();
+        Player player2 = Player.builder()
+                .id(2L)
+                .name("player2")
+                .age(21)
+                .icon("icon2")
+                .team(team)
+                .build();
+        team.getPlayerList().add(player1);
+        team.getPlayerList().add(player2);
         //when
         when(teamService.getTeamById(1L)).thenReturn(team.toDto());
         //then
         mockMvc.perform(get("/team/{teamId}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(team.getId()))
+                .andExpect(jsonPath("$.teamId").value(team.getId()))
                 .andExpect(jsonPath("$.name").value(team.getName()))
                 .andExpect(jsonPath("$.icon").value(team.getIcon()))
-                .andExpect(jsonPath("$.createdAt").value(team.getCreatedAt()))
-                .andExpect(jsonPath("$.updatedAt").value(team.getUpdatedAt()))
                 .andDo(document("team-get",
                         pathParameters(
                                 parameterWithName("teamId").description("Team ID")
                         ),
                         responseFields(
-                                fieldWithPath("id").type(JsonFieldType.NUMBER).description("Team ID"),
+                                fieldWithPath("teamId").type(JsonFieldType.NUMBER).description("Team ID"),
                                 fieldWithPath("name").type(JsonFieldType.STRING).description("Team name"),
                                 fieldWithPath("icon").type(JsonFieldType.STRING).description("Team Icon URL"),
+                                fieldWithPath("players").type(JsonFieldType.ARRAY).description("List of players on this team"),
+                                fieldWithPath("players[].playerId").type(JsonFieldType.NUMBER).description("Player ID"),
+                                fieldWithPath("players[].name").type(JsonFieldType.STRING).description("Player name"),
+                                fieldWithPath("players[].icon").type(JsonFieldType.STRING).description("Player Icon URL"),
+                                fieldWithPath("players[].age").type(JsonFieldType.NUMBER).description("Player age"),
+                                fieldWithPath("players[].team").type(JsonFieldType.NULL).description("Team of Player, Empty on this response"),
+                                fieldWithPath("players[].createdAt").type(JsonFieldType.STRING).description("Player Creation Date"),
+                                fieldWithPath("players[].updatedAt").type(JsonFieldType.STRING).description("Player Last Updated Date"),
                                 fieldWithPath("createdAt").type(JsonFieldType.STRING).description("Team Creation Date"),
                                 fieldWithPath("updatedAt").type(JsonFieldType.STRING).description("Team Last Updated Date")
                         )
