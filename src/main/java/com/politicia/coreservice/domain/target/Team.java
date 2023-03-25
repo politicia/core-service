@@ -32,7 +32,7 @@ public class Team extends Target {
                 .name(getName())
                 .icon(getIcon())
                 .players(playerList.stream()
-                        .map(Player::toDto)
+                        .map(Player::toSimpleDto)
                         .toList())
                 .createdAt(getCreatedAt())
                 .updatedAt(getUpdatedAt())

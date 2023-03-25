@@ -79,7 +79,7 @@ class PlayerServiceTest {
                 .icon("https://icon")
                 .team(team)
                 .build();
-        PlayerResponseDto expectedDto = player.toDto();
+        PlayerResponseDto expectedDto = player.toDetailDto();
         //when
         when(playerRepository.findById(any(Long.class))).thenReturn(Optional.of(player));
         PlayerResponseDto playerResponseDto = playerService.getPlayerById(1L);

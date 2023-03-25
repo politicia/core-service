@@ -3,6 +3,7 @@ package com.politicia.coreservice.domain.target;
 import com.politicia.coreservice.domain.Target;
 import com.politicia.coreservice.dto.response.TargetResponseDto;
 import com.politicia.coreservice.dto.response.target.PlayerResponseDto;
+import com.politicia.coreservice.dto.response.target.TeamResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,13 +29,30 @@ public class Player extends Target {
         setUpdatedAt(LocalDateTime.now());
     }
 
-    public PlayerResponseDto toDto() {
+    public PlayerResponseDto toSimpleDto() {
         return PlayerResponseDto.builder()
                 .playerId(getId())
                 .name(getName())
                 .icon(getIcon())
                 .age(age)
-                .team(team.toDto())
+                .createdAt(getCreatedAt())
+                .updatedAt(getUpdatedAt())
+                .build();
+    }
+
+    public PlayerResponseDto toDetailDto() {
+        return PlayerResponseDto.builder()
+                .playerId(getId())
+                .name(getName())
+                .icon(getIcon())
+                .age(age)
+                .team(TeamResponseDto.builder()
+                        .teamId(team.getId())
+                        .name(team.getName())
+                        .icon(team.getIcon())
+                        .createdAt(team.getCreatedAt())
+                        .updatedAt(team.getUpdatedAt())
+                        .build())
                 .createdAt(getCreatedAt())
                 .updatedAt(getUpdatedAt())
                 .build();
