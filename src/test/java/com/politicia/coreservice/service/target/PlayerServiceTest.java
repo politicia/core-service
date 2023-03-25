@@ -8,6 +8,7 @@ import com.politicia.coreservice.dto.request.target.player.PlayerPatchRequestDto
 import com.politicia.coreservice.dto.request.target.player.PlayerPostRequestDto;
 import com.politicia.coreservice.dto.response.target.PlayerResponseDto;
 import com.politicia.coreservice.repository.target.PlayerRepository;
+import com.politicia.coreservice.repository.target.TeamRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,6 +32,8 @@ class PlayerServiceTest {
     PlayerService playerService;
     @Mock
     PlayerRepository playerRepository;
+    @Mock
+    TeamRepository teamRepository;
     @Mock
     AmazonS3 amazonS3;
 
@@ -57,6 +60,7 @@ class PlayerServiceTest {
                 .build();
 
         //when
+        when(teamRepository.findById(1L)).thenReturn(Optional.of(team));
         when(playerRepository.save(any(Player.class))).thenReturn(player);
         playerService.createPlayer(playerPostRequestDto);
 
@@ -87,13 +91,18 @@ class PlayerServiceTest {
         assertEquals(playerResponseDto.getPlayerId(), expectedDto.getPlayerId());
         assertEquals(playerResponseDto.getAge(), expectedDto.getAge());
         assertEquals(playerResponseDto.getName(), expectedDto.getName());
-        assertEquals(playerResponseDto.getTeam(), expectedDto.getTeam());
+        assertEquals(playerResponseDto.getTeam().getTeamId(), expectedDto.getTeam().getTeamId());
+        assertEquals(playerResponseDto.getTeam().getName(), expectedDto.getTeam().getName());
+        assertEquals(playerResponseDto.getTeam().getIcon(), expectedDto.getTeam().getIcon());
+        assertEquals(playerResponseDto.getTeam().getCreatedAt(), expectedDto.getTeam().getCreatedAt());
+        assertEquals(playerResponseDto.getTeam().getUpdatedAt(), expectedDto.getTeam().getUpdatedAt());
         assertEquals(playerResponseDto.getIcon(), expectedDto.getIcon());
         assertEquals(playerResponseDto.getCreatedAt(), expectedDto.getCreatedAt());
         assertEquals(playerResponseDto.getUpdatedAt(), expectedDto.getUpdatedAt());
     }
     @Test
     void testEditPlayerById() throws IOException {
+        ReflectionTestUtils.setField(playerService, "mediaBucket", "MEDIA_BUCKET");
         //given
         Team team = Team.builder()
                 .id(1L)
@@ -103,12 +112,14 @@ class PlayerServiceTest {
         Player player = Player.builder()
                 .id(1L)
                 .name("player")
+                .age(22)
                 .icon("https://icon")
                 .team(team)
                 .build();
-        MultipartFile newIcon = new MockMultipartFile("file.txt", new byte[0]);
+        MultipartFile newIcon = new MockMultipartFile("file.txt", new byte[100]);
         PlayerPatchRequestDto playerPatchRequestDto = PlayerPatchRequestDto.builder()
                 .name("name")
+                .age(20)
                 .icon(newIcon)
                 .build();
         //when
@@ -117,6 +128,7 @@ class PlayerServiceTest {
 
         //then
         assertEquals(player.getName(), "name");
+        assertEquals(player.getAge(), playerPatchRequestDto.getAge());
         verify(playerRepository, times(1)).findById(1L);
         verify(amazonS3, times(1)).putObject(any(String.class), any(String.class), any(InputStream.class), any(ObjectMetadata.class));
         verify(amazonS3, times(1)).deleteObject(any(String.class), any(String.class));
@@ -124,9 +136,16 @@ class PlayerServiceTest {
     }
     @Test
     void testDeletePlayerById() {
+        ReflectionTestUtils.setField(playerService, "mediaBucket", "MEDIA_BUCKET");
         //given
-
+        Player player = Player.builder()
+                .id(1L)
+                .name("player name")
+                .age(20)
+                .icon("icon")
+                .build();
         //when
+        when(playerRepository.findById(1L)).thenReturn(Optional.of(player));
         playerService.deletePlayerById(1L);
         //then
         verify(amazonS3, times(1)).deleteObject(any(String.class), any(String.class));

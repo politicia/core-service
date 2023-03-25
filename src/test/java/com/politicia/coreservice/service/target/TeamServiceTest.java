@@ -51,7 +51,7 @@ class TeamServiceTest {
                 .icon(file)
                 .build();
         //when
-        when(teamRepository.save(team)).thenReturn(team);
+        when(teamRepository.save(any(Team.class))).thenReturn(team);
         teamService.createTeam(teamPostRequestDto);
 
         //then
@@ -83,12 +83,15 @@ class TeamServiceTest {
     @Test
     void testEditTeamById() throws IOException {
         //given
+        ReflectionTestUtils.setField(teamService, "mediaBucket", "MEDIA_BUCKET");
+        ReflectionTestUtils.setField(teamService, "mediaPrefix", "https://test.url");
+
         Team team = Team.builder()
                 .id(1L)
                 .name("team")
                 .icon("https://icon")
                 .build();
-        MultipartFile newIcon = new MockMultipartFile("file.txt", new byte[0]);
+        MultipartFile newIcon = new MockMultipartFile("file.txt", new byte[100]);
         TeamPatchRequestDto teamPatchRequestDto = TeamPatchRequestDto.builder()
                 .name("newTeam")
                 .icon(newIcon)
@@ -108,7 +111,14 @@ class TeamServiceTest {
     @Test
     void testDeleteTeamById() {
         //given
+        ReflectionTestUtils.setField(teamService, "mediaBucket", "MEDIA_BUCKET");
+        Team team = Team.builder()
+                .id(1L)
+                .name("name")
+                .icon("icon")
+                .build();
         //when
+        when(teamRepository.findById(1L)).thenReturn(Optional.of(team));
         teamService.deleteTeamById(1L);
         //then
         verify(amazonS3, times(1)).deleteObject(any(String.class), any(String.class));
