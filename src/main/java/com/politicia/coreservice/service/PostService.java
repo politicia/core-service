@@ -9,6 +9,7 @@ import com.politicia.coreservice.dto.response.PostResponseDto;
 import com.politicia.coreservice.dto.response.UserResponseDto;
 import com.politicia.coreservice.repository.PostRepository;
 import com.politicia.coreservice.repository.UserRepository;
+import com.politicia.coreservice.repository.like.PostLikeRepository;
 import com.politicia.coreservice.repository.target.TargetRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final TargetRepository targetRepository;
+    private final PostLikeRepository postLikeRepository;
 
     public void createPost(PostPostRequestDto postPostRequestDto) {
         User user = userRepository.findById(postPostRequestDto.getUserId()).orElseThrow(() -> new NoSuchElementException(String.format("No such user with ID %s", postPostRequestDto.getUserId())));
