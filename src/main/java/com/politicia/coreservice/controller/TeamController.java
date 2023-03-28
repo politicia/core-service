@@ -26,27 +26,17 @@ public class TeamController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createTeam(@RequestPart MultipartFile file, @RequestPart TeamPostRequestDto body) {
-        try {
-            body.setIcon(file);
-            teamService.createTeam(body);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        }
-        catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    public ResponseEntity<Void> createTeam(@RequestPart MultipartFile file, @RequestPart TeamPostRequestDto body) throws IOException {
+        body.setIcon(file);
+        teamService.createTeam(body);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PatchMapping("/{teamId}")
-    public ResponseEntity<Void> editTeam(@PathVariable Long teamId, @RequestPart MultipartFile file, @RequestPart TeamPatchRequestDto body) {
-        try {
-            body.setIcon(file);
-            teamService.editTeamById(teamId, body);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        }
-        catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    public ResponseEntity<Void> editTeam(@PathVariable Long teamId, @RequestPart MultipartFile file, @RequestPart TeamPatchRequestDto body) throws IOException {
+        body.setIcon(file);
+        teamService.editTeamById(teamId, body);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping("/{teamId}")

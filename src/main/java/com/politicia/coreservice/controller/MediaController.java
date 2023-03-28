@@ -20,15 +20,10 @@ public class MediaController {
     private final MediaService mediaService;
 
     @PostMapping
-    public ResponseEntity<Void> createMedia(@RequestPart MultipartFile file, @RequestPart @Validated MediaPostRequestDto body) {
-        try {
-            body.setFile(file);
-            mediaService.createMedia(body);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        }
-        catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-        }
+    public ResponseEntity<Void> createMedia(@RequestPart MultipartFile file, @RequestPart @Validated MediaPostRequestDto body) throws IOException {
+        body.setFile(file);
+        mediaService.createMedia(body);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/{mediaId}")

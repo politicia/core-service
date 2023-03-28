@@ -25,15 +25,9 @@ public class UserController {
         return ResponseEntity.ok().body(user);
     }
     @PostMapping
-    public ResponseEntity<Void> createUser(@RequestPart MultipartFile file, @RequestPart UserPostRequestDto body) {
-        try {
+    public ResponseEntity<Void> createUser(@RequestPart MultipartFile file, @RequestPart UserPostRequestDto body) throws IOException {
             body.setProfilePic(file);
             userService.createUser(body);
-
             return ResponseEntity.status(HttpStatus.CREATED).build();
-        }
-        catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
     }
 }

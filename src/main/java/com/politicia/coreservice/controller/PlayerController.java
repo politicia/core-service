@@ -26,27 +26,17 @@ public class PlayerController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> postPlayer(@RequestPart MultipartFile file, @RequestPart PlayerPostRequestDto body) {
-        try {
-            body.setIcon(file);
-            playerService.createPlayer(body);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        }
-        catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    public ResponseEntity<Void> postPlayer(@RequestPart MultipartFile file, @RequestPart PlayerPostRequestDto body) throws IOException{
+        body.setIcon(file);
+        playerService.createPlayer(body);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PatchMapping("/{playerId}")
-    public ResponseEntity<Void> editPlayer(@PathVariable Long playerId, @RequestPart MultipartFile file, @RequestPart PlayerPatchRequestDto body) {
-        try {
-            body.setIcon(file);
-            playerService.editPlayerById(playerId, body);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        }
-        catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    public ResponseEntity<Void> editPlayer(@PathVariable Long playerId, @RequestPart MultipartFile file, @RequestPart PlayerPatchRequestDto body) throws IOException {
+        body.setIcon(file);
+        playerService.editPlayerById(playerId, body);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping("/{playerId}")
