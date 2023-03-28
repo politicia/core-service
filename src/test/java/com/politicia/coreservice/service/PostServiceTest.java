@@ -2,6 +2,7 @@ package com.politicia.coreservice.service;
 
 import com.politicia.coreservice.domain.Post;
 import com.politicia.coreservice.domain.User;
+import com.politicia.coreservice.domain.target.Team;
 import com.politicia.coreservice.dto.request.post.PostPatchRequestDto;
 import com.politicia.coreservice.dto.request.post.PostPostRequestDto;
 import com.politicia.coreservice.dto.response.PostResponseDto;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -43,9 +45,15 @@ class PostServiceTest {
                 .id(1L)
                 .name("userA")
                 .build();
+        Team team = Team.builder()
+                .id(1L)
+                .icon("icon")
+                .name("name")
+                .build();
         Post expectedPost = Post.builder()
                 .id(1L)
                 .user(user)
+                .target(team)
                 .title("title")
                 .text("text")
                 .build();
@@ -83,7 +91,7 @@ class PostServiceTest {
         postService.editPost(1L, postPatchRequestDto);
 
         //then
-        Assertions.assertEquals(expectedPost.getTitle(), postPatchRequestDto.getTitle());
+        assertEquals(expectedPost.getTitle(), postPatchRequestDto.getTitle());
     }
 
     @Test
@@ -106,9 +114,15 @@ class PostServiceTest {
                 .id(1L)
                 .name("userA")
                 .build();
+        Team team = Team.builder()
+                .id(1L)
+                .icon("icon")
+                .name("name")
+                .build();
         Post expectedPost = Post.builder()
                 .id(1L)
                 .user(user)
+                .target(team)
                 .title("title")
                 .build();
         //when
@@ -116,7 +130,11 @@ class PostServiceTest {
         PostResponseDto post = postService.getPostById(1L);
 
         //then
-        Assertions.assertEquals(post.getTitle(), expectedPost.getTitle());
+        assertEquals(post.getTitle(), expectedPost.getTitle());
+        assertEquals(post.getPostId(), expectedPost.getId());
+        assertEquals(post.getTarget().getTargetId(), expectedPost.getTarget().toTargetDto().getTargetId());
+        assertEquals(post.getTarget().getName(), expectedPost.getTarget().toTargetDto().getName());
+        assertEquals(post.getTarget().getIcon(), expectedPost.getTarget().toTargetDto().getIcon());
     }
 
     @Test
@@ -125,14 +143,21 @@ class PostServiceTest {
 
         User user = User.builder()
                 .build();
+        Team team = Team.builder()
+                .id(1L)
+                .icon("icon")
+                .name("name")
+                .build();
         Post postA = Post.builder()
                 .id(1L)
                 .user(user)
+                .target(team)
                 .title("titleA")
                 .build();
         Post postB = Post.builder()
                 .id(2L)
                 .user(user)
+                .target(team)
                 .title("titleB")
                 .build();
 
@@ -149,10 +174,10 @@ class PostServiceTest {
                 )).thenReturn(posts);
         Page<PostResponseDto> postsByDate = postService.getPostsByDate(today, 0);
         //then
-        Assertions.assertEquals(postsByDate.getContent().get(0).getPostId(), postA.getId());
-        Assertions.assertEquals(postsByDate.getContent().get(0).getTitle(), postA.getTitle());
-        Assertions.assertEquals(postsByDate.getContent().get(1).getPostId(), postB.getId());
-        Assertions.assertEquals(postsByDate.getContent().get(1).getTitle(), postB.getTitle());
+        assertEquals(postsByDate.getContent().get(0).getPostId(), postA.getId());
+        assertEquals(postsByDate.getContent().get(0).getTitle(), postA.getTitle());
+        assertEquals(postsByDate.getContent().get(1).getPostId(), postB.getId());
+        assertEquals(postsByDate.getContent().get(1).getTitle(), postB.getTitle());
     }
 
     @Test
@@ -160,14 +185,21 @@ class PostServiceTest {
         User user = User.builder()
                 .id(1L)
                 .build();
+        Team team = Team.builder()
+                .id(1L)
+                .icon("icon")
+                .name("name")
+                .build();
         Post postA = Post.builder()
                 .id(1L)
                 .user(user)
+                .target(team)
                 .title("titleA")
                 .build();
         Post postB = Post.builder()
                 .id(2L)
                 .user(user)
+                .target(team)
                 .title("titleB")
                 .build();
         List postList = new ArrayList<Post>(List.of(postA, postB));
@@ -180,8 +212,8 @@ class PostServiceTest {
         Page<PostResponseDto> postsByUser = postService.getPostsByUser(user.getId(), 0);
 
         //then
-        Assertions.assertEquals(postsByUser.getContent().get(0).getTitle(), postA.getTitle());
-        Assertions.assertEquals(postsByUser.getContent().get(1).getTitle(), postB.getTitle());
+        assertEquals(postsByUser.getContent().get(0).getTitle(), postA.getTitle());
+        assertEquals(postsByUser.getContent().get(1).getTitle(), postB.getTitle());
 
     }
 

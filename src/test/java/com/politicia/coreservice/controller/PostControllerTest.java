@@ -212,9 +212,15 @@ class PostControllerTest {
                 .nationality("nationality")
                 .profilePic("https://profile.pic")
                 .build();
+        Team team = Team.builder()
+                .id(1L)
+                .name("name")
+                .icon("icon")
+                .build();
         PostResponseDto postA = Post.builder()
                 .id(1L)
                 .user(user)
+                .target(team)
                 .title("title")
                 .text("text")
                 .build()
@@ -222,6 +228,7 @@ class PostControllerTest {
         PostResponseDto postB = Post.builder()
                 .id(2L)
                 .user(user)
+                .target(team)
                 .title("title")
                 .text("text")
                 .build()
@@ -256,7 +263,10 @@ class PostControllerTest {
                                 fieldWithPath("content[].user.updatedAt").type(JsonFieldType.STRING).description("User Last Updated Date"),
                                 fieldWithPath("content[].text").type(JsonFieldType.STRING).description("Post Text Content"),
                                 fieldWithPath("content[].title").type(JsonFieldType.STRING).description("Post Title"),
-                                fieldWithPath("content[].target").type(JsonFieldType.VARIES).description("Post Target"),
+                                fieldWithPath("content[].target").type(JsonFieldType.OBJECT).description("Post Target"),
+                                fieldWithPath("content[].target.targetId").type(JsonFieldType.NUMBER).description("Target ID"),
+                                fieldWithPath("content[].target.name").type(JsonFieldType.STRING).description("Target Name"),
+                                fieldWithPath("content[].target.icon").type(JsonFieldType.STRING).description("Target Icon URL"),
                                 fieldWithPath("content[].mediaList").type(JsonFieldType.ARRAY).description("Post Media List"),
                                 fieldWithPath("content[].commentCount").type(JsonFieldType.NUMBER).description("Number of Comments Of this post"),
                                 fieldWithPath("content[].createdAt").type(JsonFieldType.STRING).description("Post Creation Date"),

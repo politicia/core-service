@@ -27,7 +27,7 @@ public class TeamService {
     private final AmazonS3 amazonS3;
     @Value("${MEDIA_BUCKET_NAME}")
     private String mediaBucket;
-    @Value("${CLOUDFRONT_MEDIA_URL_PREFIX")
+    @Value("${CLOUDFRONT_MEDIA_URL_PREFIX}")
     private String mediaPrefix;
 
     private String putObject(MultipartFile file, String teamName) throws  IOException {
