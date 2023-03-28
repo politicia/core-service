@@ -13,8 +13,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("post")
@@ -59,13 +57,13 @@ public class PostController {
     }
     @PostMapping("/{postId}/like")
     public ResponseEntity<Void> likePost(@PathVariable Long postId, @RequestParam Long userId) {
-        postService.likePost(postId, userId);
+        postService.like(postId, userId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping("/{postId}/like")
     public ResponseEntity<Void> unlikePost(@PathVariable Long postId, @RequestParam Long userId) {
-        postService.unlikePost(postId, userId);
+        postService.cancelLike(postId, userId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

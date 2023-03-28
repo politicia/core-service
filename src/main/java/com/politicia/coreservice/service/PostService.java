@@ -7,7 +7,6 @@ import com.politicia.coreservice.domain.like.PostLike;
 import com.politicia.coreservice.dto.request.post.PostPatchRequestDto;
 import com.politicia.coreservice.dto.request.post.PostPostRequestDto;
 import com.politicia.coreservice.dto.response.PostResponseDto;
-import com.politicia.coreservice.dto.response.UserResponseDto;
 import com.politicia.coreservice.repository.PostRepository;
 import com.politicia.coreservice.repository.UserRepository;
 import com.politicia.coreservice.repository.like.PostLikeRepository;
@@ -18,12 +17,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -91,7 +87,7 @@ public class PostService {
         return posts.map(Post::toDto);
     }
 
-    public void likePost(Long postId, Long userId) {
+    public void like(Long postId, Long userId) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new NoSuchElementException(String.format("No such Post with ID %s", postId)));
         User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(String.format("No such User with ID %s", userId)));
 
@@ -102,10 +98,10 @@ public class PostService {
         postLikeRepository.save(like);
     }
 
-    public void unlikePost(Long postId, Long userId) {
+    public void cancelLike(Long postId, Long userId) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new NoSuchElementException(String.format("No such Post with ID %s", postId)));
         User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(String.format("No such User with ID %s", userId)));
-        PostLike like = postLikeRepository.findByPostAndUser(post, user);
+        PostLike like = postLikeRepository.findByPostAndUser(post, user).orElseThrow(() -> new NoSuchElementException(String.format("Post %s was not liked by User %s", postId, userId)));
         postLikeRepository.delete(like);
     }
 
