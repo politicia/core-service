@@ -3,6 +3,7 @@ package com.politicia.coreservice.domain.like;
 import com.politicia.coreservice.domain.Comment;
 import com.politicia.coreservice.domain.EntityPrefix;
 import com.politicia.coreservice.domain.User;
+import com.politicia.coreservice.dto.response.LikeResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,5 +29,12 @@ public class CommentLike extends EntityPrefix {
         this.comment = comment;
         this.setCreatedAt(LocalDateTime.now());
         this.setUpdatedAt(LocalDateTime.now());
+    }
+
+    public LikeResponseDto toDto() {
+        return LikeResponseDto.builder()
+                .likeId(commentLikeId)
+                .userId(user.getId())
+                .build();
     }
 }

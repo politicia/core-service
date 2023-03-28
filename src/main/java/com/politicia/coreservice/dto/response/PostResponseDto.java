@@ -17,7 +17,9 @@ public class PostResponseDto {
     private String title;
     private String text;
     private TargetResponseDto target;
-    private List<String> mediaList;
+    private List<MediaResponseDto> mediaList;
+    private List<LikeResponseDto> likes;
+    private int likeCount;
     private int commentCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

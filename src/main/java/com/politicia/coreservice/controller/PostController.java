@@ -57,4 +57,15 @@ public class PostController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+    @PostMapping("/{postId}/like")
+    public ResponseEntity<Void> likePost(@PathVariable Long postId, @RequestParam Long userId) {
+        postService.likePost(postId, userId);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @DeleteMapping("/{postId}/like")
+    public ResponseEntity<Void> unlikePost(@PathVariable Long postId, @RequestParam Long userId) {
+        postService.unlikePost(postId, userId);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }

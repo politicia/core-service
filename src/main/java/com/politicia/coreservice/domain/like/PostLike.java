@@ -3,6 +3,7 @@ package com.politicia.coreservice.domain.like;
 import com.politicia.coreservice.domain.EntityPrefix;
 import com.politicia.coreservice.domain.Post;
 import com.politicia.coreservice.domain.User;
+import com.politicia.coreservice.dto.response.LikeResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,10 +22,19 @@ public class PostLike extends EntityPrefix {
     private Post post;
     @Builder
     public PostLike(Long postLikeId, User user, Post post) {
-        setPostLikeId(postLikeId);
-        setUser(user);
+        this.postLikeId = postLikeId;
+        this.user = user;
+        this.post = post;
         setCreatedAt(LocalDateTime.now());
         setUpdatedAt(LocalDateTime.now());
-        this.post = post;
+    }
+
+    public LikeResponseDto toDto() {
+        return LikeResponseDto.builder()
+                .likeId(postLikeId)
+                .userId(user.getId())
+                .createdAt(getCreatedAt())
+                .updatedAt(getUpdatedAt())
+                .build();
     }
 }

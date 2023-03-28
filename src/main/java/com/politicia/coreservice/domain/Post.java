@@ -30,6 +30,9 @@ public class Post extends EntityPrefix {
     @OneToMany(mappedBy = "post")
     private List<Media> mediaList;
 
+    @OneToMany(mappedBy = "post")
+    private List<PostLike> likes;
+
     @Builder
     public Post(Long id, User user, String title, String text, Target target) {
         this.id = id;
@@ -47,10 +50,12 @@ public class Post extends EntityPrefix {
                 .user(user.toDto())
                 .title(title)
                 .text(text)
-                .target(target.toTargetDto())
+                .target(target != null ? target.toTargetDto() : null)
+                .mediaList(mediaList.stream().map(Media::toDto).toList())
+                .likes(likes.stream().map(PostLike::toDto).toList())
+                .likeCount(likes.size())
                 .createdAt(getCreatedAt())
                 .updatedAt(getUpdatedAt())
                 .build();
-
     }
 }

@@ -3,6 +3,7 @@ package com.politicia.coreservice.service;
 import com.politicia.coreservice.domain.Post;
 import com.politicia.coreservice.domain.Target;
 import com.politicia.coreservice.domain.User;
+import com.politicia.coreservice.domain.like.PostLike;
 import com.politicia.coreservice.dto.request.post.PostPatchRequestDto;
 import com.politicia.coreservice.dto.request.post.PostPostRequestDto;
 import com.politicia.coreservice.dto.response.PostResponseDto;
@@ -88,6 +89,24 @@ public class PostService {
         User user = userRepository.findById(userId).get();
         Page<Post> posts = postRepository.findByUser(user, pageRequest);
         return posts.map(Post::toDto);
+    }
+
+    public void likePost(Long postId, Long userId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new NoSuchElementException(String.format("No such Post with ID %s", postId)));
+        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(String.format("No such User with ID %s", userId)));
+
+        PostLike like = PostLike.builder()
+                .post(post)
+                .user(user)
+                .build();
+        postLikeRepository.save(like);
+    }
+
+    public void unlikePost(Long postId, Long userId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new NoSuchElementException(String.format("No such Post with ID %s", postId)));
+        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException(String.format("No such User with ID %s", userId)));
+        PostLike like = postLikeRepository.findByPostAndUser(post, user);
+        postLikeRepository.delete(like);
     }
 
 //    public Page<PostResponseDto> getPostsByMostViews() {
