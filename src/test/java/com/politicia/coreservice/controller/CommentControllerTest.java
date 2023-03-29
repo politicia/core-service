@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.politicia.coreservice.domain.Comment;
 import com.politicia.coreservice.domain.Post;
 import com.politicia.coreservice.domain.User;
+import com.politicia.coreservice.domain.like.CommentLike;
 import com.politicia.coreservice.dto.request.comment.CommentPatchRequestDto;
 import com.politicia.coreservice.dto.request.comment.CommentPostRequestDto;
 import com.politicia.coreservice.dto.response.CommentResponseDto;
@@ -114,31 +115,34 @@ class CommentControllerTest {
                 .title("title")
                 .text("text")
                 .build();
-        CommentResponseDto commentA = Comment
+        Comment commentA = Comment
                 .builder()
                 .id(1L)
                 .user(user)
                 .post(post)
                 .text("text")
-                .build()
-                .toDto();
-        CommentResponseDto commentB = Comment
+                .build();
+        Comment commentB = Comment
                 .builder()
                 .id(2L)
                 .user(user)
                 .post(post)
                 .text("text2")
-                .build()
-                .toDto();
-
-        Page<CommentResponseDto> expectedDto = new PageImpl<>(List.of(commentA, commentB));
+                .build();
+        CommentLike commentLike1 = CommentLike.builder()
+                .commentLikeId(1L)
+                .user(user)
+                .comment(commentA)
+                .build();
+        commentA.getLikes().add(commentLike1);
+        Page<CommentResponseDto> expectedDto = new PageImpl<>(List.of(commentA.toDto(), commentB.toDto()));
         //when
         when(commentService.getCommentListByUser(1L, 0)).thenReturn(expectedDto);
         mockMvc.perform(RestDocumentationRequestBuilders.get("/comment/user/{userId}?page={page}", 1L, 0))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.content[0].commentId").value(commentA.getCommentId()))
-                .andExpect(jsonPath("$.content[1].commentId").value(commentB.getCommentId()))
+                .andExpect(jsonPath("$.content[0].commentId").value(commentA.toDto().getCommentId()))
+                .andExpect(jsonPath("$.content[1].commentId").value(commentB.toDto().getCommentId()))
                 .andDo(
                         document("comment-get-by-user",
                                 pathParameters(
@@ -159,6 +163,12 @@ class CommentControllerTest {
                                         fieldWithPath("content[].user.updatedAt").type(JsonFieldType.STRING).description("User Last Updated Date"),
                                         fieldWithPath("content[].postId").type(JsonFieldType.NUMBER).description("Post ID of Comment"),
                                         fieldWithPath("content[].text").type(JsonFieldType.STRING).description("Comment Text Content"),
+                                        fieldWithPath("content[].likes").type(JsonFieldType.ARRAY).description("Comment Likes"),
+                                        fieldWithPath("content[].likes[].likeId").description(JsonFieldType.NUMBER).description("Like record ID"),
+                                        fieldWithPath("content[].likes[].userId").description(JsonFieldType.NUMBER).description("User who liked"),
+                                        fieldWithPath("content[].likes[].createdAt").description(JsonFieldType.NUMBER).description("Like Creation Date"),
+                                        fieldWithPath("content[].likes[].updatedAt").description(JsonFieldType.NUMBER).description("Like Last Updated Date"),
+                                        fieldWithPath("content[].likeCount").type(JsonFieldType.NUMBER).description("Number of Comment Likes"),
                                         fieldWithPath("content[].createdAt").type(JsonFieldType.STRING).description("Comment Creation Date"),
                                         fieldWithPath("content[].updatedAt").type(JsonFieldType.STRING).description("Comment Last Updated Date"),
                                         fieldWithPath("pageable").type(JsonFieldType.STRING).description("Object storing Pageable response"),
@@ -194,31 +204,35 @@ class CommentControllerTest {
                 .title("title")
                 .text("text")
                 .build();
-        CommentResponseDto commentA = Comment
+        Comment commentA = Comment
                 .builder()
                 .id(1L)
                 .user(user)
                 .post(post)
                 .text("text")
-                .build()
-                .toDto();
-        CommentResponseDto commentB = Comment
+                .build();
+        Comment commentB = Comment
                 .builder()
                 .id(2L)
                 .user(user)
                 .post(post)
                 .text("text2")
-                .build()
-                .toDto();
+                .build();
+        CommentLike commentLike1 = CommentLike.builder()
+                .commentLikeId(1L)
+                .user(user)
+                .comment(commentA)
+                .build();
+        commentA.getLikes().add(commentLike1);
 
-        Page<CommentResponseDto> expectedDto = new PageImpl<>(List.of(commentA, commentB));
+        Page<CommentResponseDto> expectedDto = new PageImpl<>(List.of(commentA.toDto(), commentB.toDto()));
         //when
         when(commentService.getCommentListByPost(1L, 0)).thenReturn(expectedDto);
         mockMvc.perform(RestDocumentationRequestBuilders.get("/comment/post/{postId}?page={page}", 1L, 0))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.content[0].commentId").value(commentA.getCommentId()))
-                .andExpect(jsonPath("$.content[1].commentId").value(commentB.getCommentId()))
+                .andExpect(jsonPath("$.content[0].commentId").value(commentA.toDto().getCommentId()))
+                .andExpect(jsonPath("$.content[1].commentId").value(commentB.toDto().getCommentId()))
                 .andDo(
                         document("comment-get-by-post",
                                 pathParameters(
@@ -241,6 +255,12 @@ class CommentControllerTest {
                                         fieldWithPath("content[].text").type(JsonFieldType.STRING).description("Comment Text Content"),
                                         fieldWithPath("content[].createdAt").type(JsonFieldType.STRING).description("Comment Creation Date"),
                                         fieldWithPath("content[].updatedAt").type(JsonFieldType.STRING).description("Comment Last Updated Date"),
+                                        fieldWithPath("content[].likes").type(JsonFieldType.ARRAY).description("Comment Likes"),
+                                        fieldWithPath("content[].likes[].likeId").description(JsonFieldType.NUMBER).description("Like record ID"),
+                                        fieldWithPath("content[].likes[].userId").description(JsonFieldType.NUMBER).description("User who liked"),
+                                        fieldWithPath("content[].likes[].createdAt").description(JsonFieldType.NUMBER).description("Like Creation Date"),
+                                        fieldWithPath("content[].likes[].updatedAt").description(JsonFieldType.NUMBER).description("Like Last Updated Date"),
+                                        fieldWithPath("content[].likeCount").type(JsonFieldType.NUMBER).description("Number of Comment Likes"),
                                         fieldWithPath("pageable").type(JsonFieldType.STRING).description("Object storing Pageable response"),
                                         fieldWithPath("last").type(JsonFieldType.BOOLEAN).description("Indicates if this page is the last page"),
                                         fieldWithPath("totalPages").type(JsonFieldType.NUMBER).description("Total number of pages available"),

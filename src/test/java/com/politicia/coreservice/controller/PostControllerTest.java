@@ -1,7 +1,9 @@
 package com.politicia.coreservice.controller;
 
+import com.politicia.coreservice.domain.Media;
 import com.politicia.coreservice.domain.Post;
 import com.politicia.coreservice.domain.User;
+import com.politicia.coreservice.domain.like.PostLike;
 import com.politicia.coreservice.domain.target.Team;
 import com.politicia.coreservice.dto.request.post.PostPatchRequestDto;
 import com.politicia.coreservice.dto.request.post.PostPostRequestDto;
@@ -157,23 +159,34 @@ class PostControllerTest {
                 .name("name")
                 .icon("icon")
                 .build();
-        PostResponseDto expectedDto = Post.builder()
+        Post expectedDto = Post.builder()
                 .id(1L)
                 .user(user)
                 .target(team)
                 .title("title")
                 .text("text")
-                .build()
-                .toDto();
-
-        expectedDto.setMediaList(new ArrayList<>());
+                .build();
+        Media media = Media.builder()
+                .id(1L)
+                .mediaType(com.politicia.coreservice.domain.MediaType.IMAGE)
+                .post(expectedDto)
+                .src("media URL")
+                .thumbnail("thumbnail URL")
+                .build();
+        expectedDto.getMediaList().add(media);
+        PostLike postLike = PostLike.builder()
+                .postLikeId(1L)
+                .post(expectedDto)
+                .user(user)
+                .build();
+        expectedDto.getLikes().add(postLike);
         //when
-        when(postService.getPostById(1L)).thenReturn(expectedDto);
+        when(postService.getPostById(1L)).thenReturn(expectedDto.toDto());
         //then
         mockMvc.perform(RestDocumentationRequestBuilders.get("/post/{postId}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.postId").value(expectedDto.getPostId()))
+                .andExpect(jsonPath("$.postId").value(expectedDto.toDto().getPostId()))
                 .andExpect(jsonPath("$.title").value(expectedDto.getTitle()))
                 .andDo(document("post-get-single",
                         pathParameters(
@@ -195,6 +208,19 @@ class PostControllerTest {
                                 fieldWithPath("target.name").type(JsonFieldType.STRING).description("Target Name"),
                                 fieldWithPath("target.icon").type(JsonFieldType.STRING).description("Target Icon URL"),
                                 fieldWithPath("mediaList").type(JsonFieldType.ARRAY).description("Post Media List"),
+                                fieldWithPath("mediaList[].mediaId").type(JsonFieldType.NUMBER).description("Media ID"),
+                                fieldWithPath("mediaList[].postId").type(JsonFieldType.NUMBER).description("Media Post ID"),
+                                fieldWithPath("mediaList[].mediaType").type(JsonFieldType.STRING).description("Media Type"),
+                                fieldWithPath("mediaList[].src").type(JsonFieldType.STRING).description("Media URL"),
+                                fieldWithPath("mediaList[].thumbnail").type(JsonFieldType.STRING).description("Media Thumbnail URL"),
+                                fieldWithPath("mediaList[].createdAt").type(JsonFieldType.STRING).description("Media Creation Date"),
+                                fieldWithPath("mediaList[].updatedAt").type(JsonFieldType.STRING).description("Media Last Updated Date"),
+                                fieldWithPath("likes").type(JsonFieldType.ARRAY).description("Comment Likes"),
+                                fieldWithPath("likes[].likeId").description(JsonFieldType.NUMBER).description("Like record ID"),
+                                fieldWithPath("likes[].userId").description(JsonFieldType.NUMBER).description("User who liked"),
+                                fieldWithPath("likes[].createdAt").description(JsonFieldType.NUMBER).description("Like Creation Date"),
+                                fieldWithPath("likes[].updatedAt").description(JsonFieldType.NUMBER).description("Like Last Updated Date"),
+                                fieldWithPath("likeCount").type(JsonFieldType.NUMBER).description("Number of Comment Likes"),
                                 fieldWithPath("commentCount").type(JsonFieldType.NUMBER).description("Number of Comments Of this post"),
                                 fieldWithPath("createdAt").type(JsonFieldType.STRING).description("Post Creation Date"),
                                 fieldWithPath("updatedAt").type(JsonFieldType.STRING).description("Post Last Updated Date")
@@ -217,26 +243,44 @@ class PostControllerTest {
                 .name("name")
                 .icon("icon")
                 .build();
-        PostResponseDto postA = Post.builder()
+        Post postA = Post.builder()
                 .id(1L)
                 .user(user)
                 .target(team)
                 .title("title")
                 .text("text")
-                .build()
-                .toDto();
-        PostResponseDto postB = Post.builder()
+                .build();
+        Post postB = Post.builder()
                 .id(2L)
                 .user(user)
                 .target(team)
                 .title("title")
                 .text("text")
-                .build()
-                .toDto();
+                .build();
 
-        postA.setMediaList(new ArrayList<>());
-        postB.setMediaList(new ArrayList<>());
-        Page<PostResponseDto> posts = new PageImpl<>(List.of(postA, postB));
+        Media media = Media.builder()
+                .id(1L)
+                .mediaType(com.politicia.coreservice.domain.MediaType.IMAGE)
+                .post(postA)
+                .src("media URL")
+                .thumbnail("thumbnail URL")
+                .build();
+        postA.getMediaList().add(media);
+        Media media2 = Media.builder()
+                .id(1L)
+                .mediaType(com.politicia.coreservice.domain.MediaType.IMAGE)
+                .post(postB)
+                .src("media URL")
+                .thumbnail("thumbnail URL")
+                .build();
+        postB.getMediaList().add(media2);
+        PostLike postLike = PostLike.builder()
+                .postLikeId(1L)
+                .post(postA)
+                .user(user)
+                .build();
+        postA.getLikes().add(postLike);
+        Page<PostResponseDto> posts = new PageImpl<>(List.of(postA.toDto(), postB.toDto()));
         //when
         when(postService.getPostsByDate(date, 0)).thenReturn(posts);
         when(postService.getPostsByUser(1L, 0)).thenReturn(posts);
@@ -244,8 +288,8 @@ class PostControllerTest {
         mockMvc.perform(RestDocumentationRequestBuilders.get("/post/list?date={date}&page={page}", date, 0))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.content[0].postId").value(postA.getPostId()))
-                .andExpect(jsonPath("$.content[0].title").value(postA.getTitle()))
+                .andExpect(jsonPath("$.content[0].postId").value(postA.toDto().getPostId()))
+                .andExpect(jsonPath("$.content[0].title").value(postA.toDto().getTitle()))
                 .andDo(document("post-get-list",
                         queryParameters(
                                 parameterWithName("date").description("Date").optional(),
@@ -268,6 +312,19 @@ class PostControllerTest {
                                 fieldWithPath("content[].target.name").type(JsonFieldType.STRING).description("Target Name"),
                                 fieldWithPath("content[].target.icon").type(JsonFieldType.STRING).description("Target Icon URL"),
                                 fieldWithPath("content[].mediaList").type(JsonFieldType.ARRAY).description("Post Media List"),
+                                fieldWithPath("content[].mediaList[].mediaId").type(JsonFieldType.NUMBER).description("Media ID"),
+                                fieldWithPath("content[].mediaList[].postId").type(JsonFieldType.NUMBER).description("Media Post ID"),
+                                fieldWithPath("content[].mediaList[].mediaType").type(JsonFieldType.STRING).description("Media Type"),
+                                fieldWithPath("content[].mediaList[].src").type(JsonFieldType.STRING).description("Media URL"),
+                                fieldWithPath("content[].mediaList[].thumbnail").type(JsonFieldType.STRING).description("Media Thumbnail URL"),
+                                fieldWithPath("content[].mediaList[].createdAt").type(JsonFieldType.STRING).description("Media Creation Date"),
+                                fieldWithPath("content[].mediaList[].updatedAt").type(JsonFieldType.STRING).description("Media Last Updated Date"),
+                                fieldWithPath("content[].likes").type(JsonFieldType.ARRAY).description("Comment Likes"),
+                                fieldWithPath("content[].likes[].likeId").description(JsonFieldType.NUMBER).description("Like record ID"),
+                                fieldWithPath("content[].likes[].userId").description(JsonFieldType.NUMBER).description("User who liked"),
+                                fieldWithPath("content[].likes[].createdAt").description(JsonFieldType.NUMBER).description("Like Creation Date"),
+                                fieldWithPath("content[].likes[].updatedAt").description(JsonFieldType.NUMBER).description("Like Last Updated Date"),
+                                fieldWithPath("content[].likeCount").type(JsonFieldType.NUMBER).description("Number of Comment Likes"),
                                 fieldWithPath("content[].commentCount").type(JsonFieldType.NUMBER).description("Number of Comments Of this post"),
                                 fieldWithPath("content[].createdAt").type(JsonFieldType.STRING).description("Post Creation Date"),
                                 fieldWithPath("content[].updatedAt").type(JsonFieldType.STRING).description("Post Last Updated Date"),

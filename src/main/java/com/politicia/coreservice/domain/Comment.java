@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,6 +31,7 @@ public class Comment extends EntityPrefix {
         this.user = user;
         this.post = post;
         this.text = text;
+        likes = new ArrayList<>();
         setCreatedAt(LocalDateTime.now());
         setUpdatedAt(LocalDateTime.now());
     }

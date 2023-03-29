@@ -54,19 +54,37 @@ operation::media-delete[snippets='http-request,path-parameters,http-response']
 [[Comment-API]]
 == Comment API
 
-[[Comment-Creation]]
+[[Comment-Create]]
 === Comment POST
 operation::comment-post[snippets='http-request,http-response']
 
-[[Comment-Edit]]
+[[Comment-Update]]
 === Comment PATCH
 operation::comment-patch[snippets='http-request,http-response']
 
-[[Comment-Deletion]]
+[[Comment-Delete]]
 === Comment DELETE
 operation::comment-delete[snippets='http-request,path-parameters,http-response']
 
-[[Comment-Get]]
+[[Comment-Read]]
 === Comment GET
 operation::comment-get[snippets='http-request,path-parameters,http-response,response-fields']
 
+[[Team-API]]
+== Team API
+
+[[Team-Create]]
+=== Team POST
+operation::team-post[snippets='http-request,http-response']
+
+[[Team-Read]]
+=== Team GET
+operation::team-get[snippets='http-request,path-parameters,http-response,response-fields']
+
+[[Team-Update]]
+=== Team PATCH
+operation::team-patch[snippets='http-request,path-parameters,http-response']
+
+[[Team-Delete]]
+=== Team DELETE
+operation::team-delete[snippets='http-request,path-parameters,http-response']
