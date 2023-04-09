@@ -4,6 +4,8 @@ import com.politicia.coreservice.domain.Target;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -16,6 +18,8 @@ public class Series extends Target {
         setId(id);
         setName(name);
         setIcon(icon);
+        setCreatedAt(LocalDateTime.now());
+        setUpdatedAt(LocalDateTime.now());
         this.seriesType = seriesType;
     }
 }
